@@ -19,14 +19,24 @@ namespace ApiSindisure.Services.Supabase
                 AutoConnectRealtime = true
             };
 
-            _client = new SupabaseClient(url, anonKey, options);
-            _client.InitializeAsync().Wait();
+            if(url is not null)
+            {
+                _client = new SupabaseClient(url, anonKey, options);
+                _client.InitializeAsync().Wait();
+            }        
         }
 
         public async Task<Session?> SignIn(string email, string password)
         {
-            var session = await _client.Auth.SignIn(email, password);
-            return session;
+            try
+            {
+                var session = await _client.Auth.SignIn(email, password);
+                return session;
+            }
+            catch (Exception ex) 
+            {
+                return null;
+            }            
         }
 
         public async Task<User?> GetUser(string jwt)

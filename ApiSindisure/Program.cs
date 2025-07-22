@@ -1,4 +1,11 @@
-using ApiSindisure.Services.Jwt;
+using ApiSindisure.Application.Jwt;
+using ApiSindisure.Apps.Login;
+using ApiSindisure.Apps.AccountsPayable;
+using ApiSindisure.Apps.Audit;
+using ApiSindisure.Domain.Interfaces.Apps.Login;
+using ApiSindisure.Domain.Interfaces.Apps.AccountsPayable;
+using ApiSindisure.Domain.Interfaces.Apps.Audit;
+using ApiSindisure.Domain.Interfaces.Services.Jwt;
 using ApiSindisure.Services.Supabase;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -6,14 +13,25 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<SupabaseService>();
-builder.Services.AddSingleton<JwtService>();
+builder.Services.AddSingleton<IJwtServices, JwtServices>();
+builder.Services.AddSingleton<ILoginApp, LoginApp>();
+builder.Services.AddSingleton<IAccountsPayableApp, AccountsPayableApp>();
+builder.Services.AddSingleton<IAuditApp, AuditApp>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader(); 
+    });
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -26,15 +44,18 @@ builder.Services.AddAuthentication(options =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(key)
     };
 });
 
+
 var app = builder.Build();
+
+app.UseDeveloperExceptionPage();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -45,6 +66,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
