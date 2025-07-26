@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using ApiSindisure.Domain.Entity;
 
 namespace ApiSindisure.Domain.ViewModel.AccountsPayable
 {
     public class AccountsPayableViewModel
     {
-        public class GetRequest
-        {
-            public string CondominiumId { get; set; }
+        public class GetRequest : BaseEntity
+        {                   
         }
 
         public class CreateRequest

@@ -1,4 +1,5 @@
-﻿using Supabase;
+﻿using Microsoft.AspNetCore.Mvc.Routing;
+using Supabase;
 using Supabase.Gotrue;
 using SupabaseClient = Supabase.Client;
 
@@ -8,22 +9,24 @@ namespace ApiSindisure.Services.Supabase
     public class SupabaseService
     {
         private readonly SupabaseClient _client;
+        private readonly string _url;
+        private readonly string _anonKey;
 
         public SupabaseService(IConfiguration configuration)
         {
-            var url = configuration["Supabase:Url"];
-            var anonKey = configuration["Supabase:AnonKey"];
+            _url = configuration["Supabase:Url"];
+            _anonKey = configuration["Supabase:AnonKey"];
 
             var options = new SupabaseOptions
             {
                 AutoConnectRealtime = true
             };
 
-            if(url is not null)
+            if (_url is not null)
             {
-                _client = new SupabaseClient(url, anonKey, options);
+                _client = new SupabaseClient(_url, _anonKey, options);
                 _client.InitializeAsync().Wait();
-            }        
+            }
         }
 
         public async Task<Session?> SignIn(string email, string password)
@@ -49,9 +52,18 @@ namespace ApiSindisure.Services.Supabase
             await _client.Auth.SignOut();
         }
 
-        public SupabaseClient GetClient()
+        public async Task<SupabaseClient> GetClientAsync()
         {
-            return _client;
+            try
+            {   
+                return _client;
+            
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao obter cliente Supabase: " + ex.Message);
+            }
+            
         }
     }
 }
