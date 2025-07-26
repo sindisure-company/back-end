@@ -52,7 +52,7 @@ namespace ApiSindisure.Services.Supabase
             await _client.Auth.SignOut();
         }
 
-        public async Task<SupabaseClient> GetClientAsync()
+        public SupabaseClient GetClient()
         {
             try
             {   

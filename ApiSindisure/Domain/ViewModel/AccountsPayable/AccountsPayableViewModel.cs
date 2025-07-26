@@ -6,8 +6,7 @@ namespace ApiSindisure.Domain.ViewModel.AccountsPayable
     public class AccountsPayableViewModel
     {
         public class GetRequest : BaseEntity
-        {                   
-        }
+        {}
 
         public class CreateRequest
         {
@@ -38,10 +37,8 @@ namespace ApiSindisure.Domain.ViewModel.AccountsPayable
             public string? FileUrl { get; set; }
         }
 
-        public class UpdateRequest
+        public class UpdateRequest : BaseEntity
         {
-            public string Id { get; set; }
-            
             [Required]
             public string Description { get; set; }
             
@@ -65,14 +62,11 @@ namespace ApiSindisure.Domain.ViewModel.AccountsPayable
             public string? FileUrl { get; set; }
         }
 
-        public class DeleteRequest
-        {
-            public string Id { get; set; }
-        }
+        public class DeleteRequest : BaseEntity
+        {}
 
-        public class Response
+        public class Response : BaseEntity
         {
-            public string Id { get; set; }
             public string Description { get; set; }
             public decimal Amount { get; set; }
             public DateTime DueDate { get; set; }
