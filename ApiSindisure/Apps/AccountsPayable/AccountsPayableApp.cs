@@ -61,6 +61,7 @@ namespace ApiSindisure.Apps.AccountsPayable
         {
             try
             {
+                
                 var client = _supabaseService.GetClient();
                 var model = new AccountsPayableModel
                 {
