@@ -19,7 +19,7 @@ namespace ApiSindisure.Apps.Audit
             try
             {
                 string jwt = string.Empty;
-                var client = await _supabaseService.GetClientAsync();
+                var client = _supabaseService.GetClient();
                 
                 // Usar RPC para chamar a função log_general_audit
                 var parameters = new Dictionary<string, object>
@@ -45,7 +45,7 @@ namespace ApiSindisure.Apps.Audit
             try
             {
                 string jwt = string.Empty;
-                var client = await _supabaseService.GetClientAsync();
+                var client = _supabaseService.GetClient();
                 var query = client.From<AuditLogModel>().Select("*");
 
                 if (!string.IsNullOrEmpty(request.UserId))

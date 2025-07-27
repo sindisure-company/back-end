@@ -73,6 +73,7 @@ namespace ApiSindisure.Apps.AccountsPayable
                     Category = request.Category,
                     Notes = request.Notes,
                     CondominiumId = request.CondominiumId,
+                    CreateBy = request.CreateBy,
                     FileName = request.FileName,
                     FileUrl = request.FileUrl,
                     CreatedAt = DateTime.UtcNow,
@@ -127,7 +128,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     Notes = request.Notes,
                     FileName = request.FileName,
                     FileUrl = request.FileUrl,
-                    UpdatedAt = DateTime.UtcNow
+                    UpdatedAt = DateTime.UtcNow,
+                    CreateBy = request.CreateBy,
                 };
 
                 var result = await client
@@ -148,6 +150,7 @@ namespace ApiSindisure.Apps.AccountsPayable
                     InvoiceNumber = updatedModel.InvoiceNumber,
                     Category = updatedModel.Category,
                     Notes = updatedModel.Notes,
+                    CreateBy = updatedModel.CreateBy,
                     CondominiumId = updatedModel.CondominiumId,
                     FileName = updatedModel.FileName,
                     FileUrl = updatedModel.FileUrl,

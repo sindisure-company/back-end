@@ -7,7 +7,7 @@ namespace ApiSindisure.Controllers.V1
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class AccountsPayableController : ControllerBase
     {
         [HttpGet]
@@ -19,14 +19,9 @@ namespace ApiSindisure.Controllers.V1
         {
             try
             {
-                var token = Request.Headers["Authorization"].ToString();
-
                 if (string.IsNullOrEmpty(condominiumId))
                     return BadRequest(new { error = "CondominiumId não pode ser nulo ou vazio." });
                 
-                if(string.IsNullOrEmpty(token))
-                    return BadRequest(new { error = "Token não pode ser nulo ou vazio." });
-
                 var request = new AccountsPayableViewModel.GetRequest { Id = condominiumId};
                 var response = await app.GetAccountsPayableAsync(request, CancellationToken.None);
                 return Ok(response);
@@ -47,11 +42,11 @@ namespace ApiSindisure.Controllers.V1
             try
             {
                 var response = await app.CreateAccountsPayableAsync(request, CancellationToken.None);
-                return Ok(response);
+                return Created();
             }
             catch (Exception ex)
             {
-                return BadRequest(new { error = "Erro ao criar conta a pagar" });
+                return BadRequest(new { error = "Erro ao criar conta a pagar. Mais detalhes: " + ex.Message });
             }
         }
 
@@ -67,11 +62,11 @@ namespace ApiSindisure.Controllers.V1
             {
                 request.Id = id;
                 var response = await app.UpdateAccountsPayableAsync(request, CancellationToken.None);
-                return Ok(response);
+                return NoContent();
             }
             catch (Exception ex)
             {
-                return BadRequest(new { error = "Erro ao atualizar conta a pagar" });
+                return BadRequest(new { error = "Erro ao atualizar conta a pagar. Mais detalhes: " + ex.Message });
             }
         }
 
@@ -90,7 +85,7 @@ namespace ApiSindisure.Controllers.V1
             }
             catch (Exception ex)
             {
-                return BadRequest(new { error = "Erro ao excluir conta a pagar" });
+                return BadRequest(new { error = "Erro ao excluir conta a pagar. Mais detalhes: " + ex.Message });
             }
         }
     }

@@ -32,6 +32,9 @@
         [Supabase.Postgrest.Attributes.Column("condominium_id")]
         public string CondominiumId { get; set; }
 
+        [Supabase.Postgrest.Attributes.Column("created_by")]
+        public string CreateBy { get; set; }
+
         [Supabase.Postgrest.Attributes.Column("file_name")]
         public string? FileName { get; set; }
 
