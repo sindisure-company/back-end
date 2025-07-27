@@ -42,7 +42,7 @@ namespace ApiSindisure.Controllers.V1
             try
             {
                 var response = await app.CreateAccountsPayableAsync(request, CancellationToken.None);
-                return Created();
+                return Created(response.Id, response);
             }
             catch (Exception ex)
             {

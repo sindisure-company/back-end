@@ -60,8 +60,7 @@ namespace ApiSindisure.Apps.AccountsPayable
         public async Task<AccountsPayableViewModel.Response> CreateAccountsPayableAsync(AccountsPayableViewModel.CreateRequest request, CancellationToken cancellationToken)
         {
             try
-            {
-                
+            {                
                 var client = _supabaseService.GetClient();
                 var model = new AccountsPayableModel
                 {
