@@ -7,7 +7,7 @@ namespace ApiSindisure.Controllers.V1
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    //[Authorize]
+    [Authorize]
     public class AccountsPayableController : ControllerBase
     {
         [HttpGet]

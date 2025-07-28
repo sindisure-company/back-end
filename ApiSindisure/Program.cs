@@ -2,10 +2,12 @@ using ApiSindisure.Application.Jwt;
 using ApiSindisure.Apps.Login;
 using ApiSindisure.Apps.AccountsPayable;
 using ApiSindisure.Apps.AccountsReceivable;
+using ApiSindisure.Apps.Condominium;
 using ApiSindisure.Apps.Audit;
 using ApiSindisure.Domain.Interfaces.Apps.Login;
 using ApiSindisure.Domain.Interfaces.Apps.AccountsPayable;
 using ApiSindisure.Domain.Interfaces.Apps.AccountsReceivable;
+using ApiSindisure.Domain.Interfaces.Apps.Condominium;
 using ApiSindisure.Domain.Interfaces.Apps.Audit;
 using ApiSindisure.Domain.Interfaces.Services.Jwt;
 using ApiSindisure.Services.Supabase;
@@ -23,6 +25,7 @@ builder.Services.AddSingleton<IJwtServices, JwtServices>();
 builder.Services.AddSingleton<ILoginApp, LoginApp>();
 builder.Services.AddSingleton<IAccountsPayableApp, AccountsPayableApp>();
 builder.Services.AddSingleton<IAccountsReceivableApp, AccountsReceivableApp>();
+builder.Services.AddSingleton<ICondominiumApp, CondominiumApp>();
 builder.Services.AddSingleton<IAuditApp, AuditApp>();
 
 builder.Services.AddCors(options =>
