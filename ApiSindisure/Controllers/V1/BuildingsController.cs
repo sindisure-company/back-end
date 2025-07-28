@@ -1,5 +1,5 @@
-using ApiSindisure.Domain.Interfaces.Apps.AccountsReceivable;
-using ApiSindisure.Domain.ViewModel.AccountsReceivable;
+using ApiSindisure.Domain.Interfaces.Apps.Buildings;
+using ApiSindisure.Domain.ViewModel.Buildings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
@@ -8,40 +8,40 @@ namespace ApiSindisure.Controllers.V1
     [ApiController]
     [Route("api/v1/[controller]")]
     [Authorize]
-    public class AccountsReceivableController : ControllerBase
+    public class BuildingsController : ControllerBase
     {
         [HttpGet]
-        [ProducesResponseType<List<AccountsReceivableViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType<List<BuildingsViewModel.Response>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAccountsReceivable(
+        public async Task<IActionResult> GetBuildings(
             [FromQuery] string condominiumId,
-            [FromServices] IAccountsReceivableApp app)
+            [FromServices] IBuildingsApp app)
         {
             try
             {
                 if (string.IsNullOrEmpty(condominiumId))
                     return BadRequest(new { error = "CondominiumId não pode ser nulo ou vazio." });
                 
-                var request = new AccountsReceivableViewModel.GetRequest { Id = condominiumId};
-                var response = await app.GetAccountsReceivableAsync(request, CancellationToken.None);
+                var request = new BuildingsViewModel.GetRequest { Id = condominiumId};
+                var response = await app.GetBuildingsAsync(request, CancellationToken.None);
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                return BadRequest(new { error = "Erro ao buscar contas a receber. Mais detalhes: " + ex.Message });
+                return BadRequest(new { error = "Erro ao buscar contas a pagar. Mais detalhes: " + ex.Message });
             }
         }
 
         [HttpPost]
-        [ProducesResponseType<AccountsReceivableViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType<BuildingsViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAccountsReceivable(
-            [FromBody] AccountsReceivableViewModel.CreateRequest request,
-            [FromServices] IAccountsReceivableApp app)
+        public async Task<IActionResult> CreateBuildings(
+            [FromBody] BuildingsViewModel.CreateRequest request,
+            [FromServices] IBuildingsApp app)
         {
             try
             {
-                var response = await app.CreateAccountsReceivableAsync(request, CancellationToken.None);
+                var response = await app.CreateBuildingsAsync(request, CancellationToken.None);
                 return Created(response.Id, response);
             }
             catch (Exception ex)
@@ -51,17 +51,17 @@ namespace ApiSindisure.Controllers.V1
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType<AccountsReceivableViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType<BuildingsViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateAccountsReceivable(
+        public async Task<IActionResult> UpdateBuildings(
             string id,
-            [FromBody] AccountsReceivableViewModel.UpdateRequest request,
-            [FromServices] IAccountsReceivableApp app)
+            [FromBody] BuildingsViewModel.UpdateRequest request,
+            [FromServices] IBuildingsApp app)
         {
             try
             {
                 request.Id = id;
-                var response = await app.UpdateAccountsReceivableAsync(request, CancellationToken.None);
+                var response = await app.UpdateBuildingsAsync(request, CancellationToken.None);
                 return NoContent();
             }
             catch (Exception ex)
@@ -73,14 +73,14 @@ namespace ApiSindisure.Controllers.V1
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteAccountsReceivable(
+        public async Task<IActionResult> DeleteBuildings(
             string id,
-            [FromServices] IAccountsReceivableApp app)
+            [FromServices] IBuildingsApp app)
         {
             try
             {
-                var request = new AccountsReceivableViewModel.DeleteRequest { Id = id };
-                await app.DeleteAccountsReceivableAsync(request, CancellationToken.None);
+                var request = new BuildingsViewModel.DeleteRequest { Id = id };
+                await app.DeleteBuildingsAsync(request, CancellationToken.None);
                 return Ok(new { message = "Conta a pagar excluída com sucesso" });
             }
             catch (Exception ex)
