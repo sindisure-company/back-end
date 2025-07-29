@@ -16,6 +16,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ApiSindisure.Domain.Interfaces.Apps.Buildings;
 using ApiSindisure.Apps.Buildings;
+using ApiSindisure.Domain.Interfaces.Apps.Companies;
+using ApiSindisure.Apps.Companies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,7 @@ builder.Services.AddSingleton<IAccountsPayableApp, AccountsPayableApp>();
 builder.Services.AddSingleton<IAccountsReceivableApp, AccountsReceivableApp>();
 builder.Services.AddSingleton<ICondominiumApp, CondominiumApp>();
 builder.Services.AddSingleton<IBuildingsApp, BuildingsApp>();
+builder.Services.AddSingleton<ICompaniesApp, CompaniesApp>();
 builder.Services.AddSingleton<IAuditApp, AuditApp>();
 
 builder.Services.AddCors(options =>
