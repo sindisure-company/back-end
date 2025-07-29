@@ -1,5 +1,5 @@
 
-[Supabase.Postgrest.Attributes.Table("condominium_details")]
+[Supabase.Postgrest.Attributes.Table("building_details")]
 public class BuildingsModel : Supabase.Postgrest.Models.BaseModel
 {
     [Supabase.Postgrest.Attributes.PrimaryKey("id")]
@@ -7,6 +7,7 @@ public class BuildingsModel : Supabase.Postgrest.Models.BaseModel
 
     [Supabase.Postgrest.Attributes.Column("condominium_id")]
     public string? CondominiumId { get; set; }
+
     [Supabase.Postgrest.Attributes.Column("name")]
     public string? Name { get; set; }
 

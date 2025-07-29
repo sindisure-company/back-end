@@ -29,7 +29,7 @@ namespace ApiSindisure.Apps.Buildings
                 var result = await client
                     .From<BuildingsModel>()
                     .Select("*")
-                    .Filter("created_by", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Filter("condominium_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
                     .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
                     .Get();
 
@@ -62,13 +62,11 @@ namespace ApiSindisure.Apps.Buildings
                 var client = _supabaseService.GetClient();
                 var model = new BuildingsModel
                 {
-                    CondominiumId = model.CondominiumId,
-                    Email = request.Email,
-                    Name = request.Name,
+                    CondominiumId = request.CondominiumId,
                     Observation = request.Observation,
                     PersonalContact = request.PersonalContact,
                     Phone = request.Phone,
-                    UnitNumber = model.UnitNumber,
+                    UnitNumber = request.UnitNumber,
                     Status = request.Status,
                     CreatedBy = request.CreatedBy,                 
                     CreatedAt = DateTime.UtcNow,
@@ -111,13 +109,13 @@ namespace ApiSindisure.Apps.Buildings
                 var model = new BuildingsModel
                 {
                     Id = request.Id,
-                    CondominiumId = model.CondominiumId,
+                    CondominiumId = request.CondominiumId,
                     Email = request.Email,
                     Name = request.Name,
                     Observation = request.Observation,
                     PersonalContact = request.PersonalContact,
                     Phone = request.Phone,
-                    Units = request.Units,
+                    UnitNumber = request.UnitNumber,
                     Status = request.Status,
                     CreatedBy = request.CreatedBy,                 
                     CreatedAt = DateTime.UtcNow,
@@ -133,8 +131,8 @@ namespace ApiSindisure.Apps.Buildings
 
                 return new BuildingsViewModel.Response
                 {
-                    Id = updatedModel.Id,
-                    Address = updatedModel.Address,
+                    Id = updatedModel.Id,   
+                    CondominiumId = request.CondominiumId,         
                     Email = updatedModel.Email,
                     Name = updatedModel.Name,
                     Observation = updatedModel.Observation,

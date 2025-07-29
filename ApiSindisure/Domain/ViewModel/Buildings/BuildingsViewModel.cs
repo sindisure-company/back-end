@@ -14,14 +14,7 @@ namespace ApiSindisure.Domain.ViewModel.Buildings
             [Required]
             [JsonPropertyName("condominium_id")]
             public string CondominiumId { get; set; }
-
-            [Required]
-            [JsonPropertyName("email")]
-            public string Email { get; set; }
-
-            [Required]
-            [JsonPropertyName("name")]
-            public string Name { get; set; }
+     
 
             [JsonPropertyName("observation")]
             public string Observation { get; set; }
@@ -33,6 +26,7 @@ namespace ApiSindisure.Domain.ViewModel.Buildings
             [JsonPropertyName("phone")]
             public string Phone { get; set; }
 
+            [Required]
             [JsonPropertyName("unit_number")]
             public int UnitNumber { get; set; }
 

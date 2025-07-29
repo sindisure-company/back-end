@@ -14,6 +14,8 @@ using ApiSindisure.Services.Supabase;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ApiSindisure.Domain.Interfaces.Apps.Buildings;
+using ApiSindisure.Apps.Buildings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,7 @@ builder.Services.AddSingleton<ILoginApp, LoginApp>();
 builder.Services.AddSingleton<IAccountsPayableApp, AccountsPayableApp>();
 builder.Services.AddSingleton<IAccountsReceivableApp, AccountsReceivableApp>();
 builder.Services.AddSingleton<ICondominiumApp, CondominiumApp>();
+builder.Services.AddSingleton<IBuildingsApp, BuildingsApp>();
 builder.Services.AddSingleton<IAuditApp, AuditApp>();
 
 builder.Services.AddCors(options =>
