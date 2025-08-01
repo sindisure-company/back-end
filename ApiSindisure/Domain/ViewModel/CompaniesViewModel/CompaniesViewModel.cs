@@ -12,32 +12,32 @@ namespace ApiSindisure.Domain.ViewModel.CompaniesViewModel
         public class CreateRequest
         {           
             [JsonPropertyName("address")]
-            public string Address { get; set; }
+            public string? Address { get; set; }
 
             [JsonPropertyName("email")]
-            public string Email { get; set; }
+            public string? Email { get; set; }
 
             [Required]
             [JsonPropertyName("name")]
             public string Name { get; set; }
 
             [JsonPropertyName("observation")]
-            public string Observation { get; set; }
+            public string? Observation { get; set; }
 
             [JsonPropertyName("personal_contact")]
             public string? PersonalContact { get; set; }
             
             [JsonPropertyName("phone")]
-            public string Phone { get; set; }
+            public string? Phone { get; set; }
 
             [JsonPropertyName("document")]
-            public string Document { get; set; }
+            public string? Document { get; set; }
 
             [JsonPropertyName("category")]
             public string Category{ get; set; }
 
             [JsonPropertyName("notes")]
-            public string Notes{ get; set; }
+            public string? Notes{ get; set; }
 
             [Required]
             [JsonPropertyName("status")]
@@ -51,32 +51,29 @@ namespace ApiSindisure.Domain.ViewModel.CompaniesViewModel
         public class UpdateRequest : BaseEntity
         {
             [JsonPropertyName("address")]
-            public string Address { get; set; }
+            public string? Address { get; set; }
 
             [JsonPropertyName("email")]
-            public string Email { get; set; }
+            public string? Email { get; set; }
 
             [Required]
             [JsonPropertyName("name")]
             public string Name { get; set; }
 
-            [JsonPropertyName("observation")]
-            public string Observation { get; set; }
-
             [JsonPropertyName("personal_contact")]
             public string? PersonalContact { get; set; }
             
             [JsonPropertyName("phone")]
-            public string Phone { get; set; }
+            public string? Phone { get; set; }
 
             [JsonPropertyName("document")]
-            public string Document { get; set; }
+            public string? Document { get; set; }
 
             [JsonPropertyName("category")]
             public string Category{ get; set; }
 
             [JsonPropertyName("notes")]
-            public string Notes{ get; set; }
+            public string? Notes{ get; set; }
 
             [Required]
             [JsonPropertyName("status")]
@@ -84,13 +81,7 @@ namespace ApiSindisure.Domain.ViewModel.CompaniesViewModel
 
             [JsonPropertyName("created_by")]
             public string CreatedBy { get; set; }
-
-            [Required]
-            [JsonPropertyName("created_at")]
-            public string CreatedAt { get; set; }  
-
-            [JsonPropertyName("updated_at")]
-            public string UpdateAt { get; set; }  
+           
         }
 
         public class DeleteRequest : BaseEntity
@@ -118,7 +109,7 @@ namespace ApiSindisure.Domain.ViewModel.CompaniesViewModel
             public string Phone { get; set; }
 
             [JsonPropertyName("document")]
-            public string Document { get; set; }
+            public string? Document { get; set; }
 
             [JsonPropertyName("category")]
             public string Category{ get; set; }

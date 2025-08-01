@@ -3,6 +3,8 @@ using ApiSindisure.Domain.Interfaces.Apps.Companies;
 using ApiSindisure.Domain.ViewModel.CompaniesViewModel;
 using ApiSindisure.Services.Supabase;
 
+using Supabase.Postgrest.Attributes;
+
 namespace ApiSindisure.Apps.Companies
 {
     public class CompaniesApp : ICompaniesApp
@@ -63,6 +65,7 @@ namespace ApiSindisure.Apps.Companies
                 var client = _supabaseService.GetClient();
                 var model = new CompaniesModel
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Address = request.Address,
                     Category = request.Category,
                     Document = request.Document,
@@ -113,6 +116,7 @@ namespace ApiSindisure.Apps.Companies
                 var client = _supabaseService.GetClient();
                 var model = new CompaniesModel
                 {
+                    Id = request.Id,
                     Address = request.Address,
                     Category = request.Category,
                     Document = request.Document,
@@ -122,10 +126,9 @@ namespace ApiSindisure.Apps.Companies
                     PersonalContact = request.PersonalContact,
                     Phone = request.Phone,                    
                     Status = request.Status,                  
-                    CreatedBy = request.CreatedBy,                 
-                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = request.CreatedBy,  
                     UpdatedAt = DateTime.UtcNow
-                };
+                };               
 
                 var result = await client
                     .From<CompaniesModel>()
@@ -146,8 +149,7 @@ namespace ApiSindisure.Apps.Companies
                     PersonalContact = updatedModel.PersonalContact,
                     Phone = updatedModel.Phone,                    
                     Status = updatedModel.Status,
-                    CreatedBy = updatedModel.CreatedBy,                 
-                    CreatedAt = updatedModel.CreatedAt,
+                    CreatedBy = updatedModel.CreatedBy,   
                     UpdatedAt = updatedModel.UpdatedAt
                 };
             }

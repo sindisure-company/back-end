@@ -109,9 +109,7 @@ namespace ApiSindisure.Apps.Buildings
                 var model = new BuildingsModel
                 {
                     Id = request.Id,
-                    CondominiumId = request.CondominiumId,
-                    Email = request.Email,
-                    Name = request.Name,
+                    CondominiumId = request.CondominiumId,                    
                     Observation = request.Observation,
                     PersonalContact = request.PersonalContact,
                     Phone = request.Phone,

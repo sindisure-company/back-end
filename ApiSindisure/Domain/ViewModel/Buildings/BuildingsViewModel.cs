@@ -19,6 +19,7 @@ namespace ApiSindisure.Domain.ViewModel.Buildings
             [JsonPropertyName("observation")]
             public string Observation { get; set; }
 
+            [Required]
             [JsonPropertyName("personal_contact")]
             public string? PersonalContact { get; set; }
 
@@ -34,6 +35,7 @@ namespace ApiSindisure.Domain.ViewModel.Buildings
             [JsonPropertyName("status")]
             public string Status { get; set; }
 
+            [Required]
             [JsonPropertyName("created_by")]
             public string CreatedBy { get; set; }
          
@@ -45,15 +47,6 @@ namespace ApiSindisure.Domain.ViewModel.Buildings
             [JsonPropertyName("condominium_id")]
             public string CondominiumId { get; set; }
 
-            [Required]
-            [JsonPropertyName("email")]
-            public string Email { get; set; }
-
-            [Required]
-            [JsonPropertyName("name")]
-            public string Name { get; set; }
-
-            [Required]
             [JsonPropertyName("observation")]
             public string Observation { get; set; }
 
@@ -73,13 +66,6 @@ namespace ApiSindisure.Domain.ViewModel.Buildings
 
             [JsonPropertyName("created_by")]
             public string CreatedBy { get; set; }
-
-            [Required]
-            [JsonPropertyName("created_at")]
-            public string CreatedAt { get; set; }  
-
-            [JsonPropertyName("updated_at")]
-            public string UpdateAt { get; set; }  
         }
 
         public class DeleteRequest : BaseEntity

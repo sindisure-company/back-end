@@ -59,7 +59,6 @@ namespace ApiSindisure.Domain.ViewModel.Condominium
             [JsonPropertyName("name")]
             public string Name { get; set; }
 
-            [Required]
             [JsonPropertyName("observation")]
             public string Observation { get; set; }
 
@@ -80,12 +79,6 @@ namespace ApiSindisure.Domain.ViewModel.Condominium
             [JsonPropertyName("created_by")]
             public string CreatedBy { get; set; }
 
-            [Required]
-            [JsonPropertyName("created_at")]
-            public string CreatedAt { get; set; }  
-
-            [JsonPropertyName("updated_at")]
-            public string UpdateAt { get; set; }  
         }
 
         public class DeleteRequest : BaseEntity

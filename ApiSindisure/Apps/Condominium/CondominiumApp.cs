@@ -124,6 +124,12 @@ namespace ApiSindisure.Apps.Condominium
                     UpdatedAt = DateTime.UtcNow
                 };
 
+                var resultId = await client
+                    .From<CondominiumModel>()
+                    .Select("id")
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Get();
+
                 var result = await client
                     .From<CondominiumModel>()
                     .Where(x => x.Id == request.Id)
