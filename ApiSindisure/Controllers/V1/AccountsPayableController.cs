@@ -21,9 +21,31 @@ namespace ApiSindisure.Controllers.V1
             {
                 if (string.IsNullOrEmpty(condominiumId))
                     return BadRequest(new { error = "CondominiumId não pode ser nulo ou vazio." });
-                
-                var request = new AccountsPayableViewModel.GetRequest { Id = condominiumId};
+
+                var request = new AccountsPayableViewModel.GetRequest { Id = condominiumId };
                 var response = await app.GetAccountsPayableAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar contas a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
+        [HttpGet("GetUpcommingAccountsPayable")]
+        [ProducesResponseType<List<AccountsPayableViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUpcommingAccountsPayable(
+            [FromQuery] string condominiumId,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(condominiumId))
+                    return BadRequest(new { error = "CondominiumId não pode ser nulo ou vazio." });
+
+                var request = new AccountsPayableViewModel.GetRequest { Id = condominiumId };
+                var response = await app.GetUpcommingAccountsPayableAsync(request, CancellationToken.None);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -70,6 +92,26 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpPut("UpdateAccountsStatusPayable/{id}")]
+        [ProducesResponseType<AccountsPayableViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateAccountsStatusPayable(
+            string id,
+            [FromBody] AccountsPayableViewModel.UpdateRequest request,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                request.Id = id;
+                var response = await app.UpdateAccountsPayableStatusAsync(request, CancellationToken.None);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao atualizar conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -81,6 +123,25 @@ namespace ApiSindisure.Controllers.V1
             {
                 var request = new AccountsPayableViewModel.DeleteRequest { Id = id };
                 await app.DeleteAccountsPayableAsync(request, CancellationToken.None);
+                return Ok(new { message = "Conta a pagar excluída com sucesso" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao excluir conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+        
+        [HttpDelete("DeleteUpcommingAccountsPayable/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteUpcommingAccountsPayable(
+            string id,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                var request = new AccountsPayableViewModel.DeleteRequest { Id = id };
+                await app.DeleteUpcommingAccountsPayableAsync(request, CancellationToken.None);
                 return Ok(new { message = "Conta a pagar excluída com sucesso" });
             }
             catch (Exception ex)

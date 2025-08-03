@@ -1,5 +1,5 @@
 // Modelo para mapeamento com Supabase
-    [Supabase.Postgrest.Attributes.Table("accounts_payable")]
+    [Supabase.Postgrest.Attributes.Table("accounts_receivable")]
     public class AccountsReceivableModel : Supabase.Postgrest.Models.BaseModel
     {
         [Supabase.Postgrest.Attributes.PrimaryKey("id")]
@@ -16,9 +16,6 @@
 
         [Supabase.Postgrest.Attributes.Column("status")]
         public string Status { get; set; }
-
-        [Supabase.Postgrest.Attributes.Column("company")]
-        public string? Company { get; set; }
 
         [Supabase.Postgrest.Attributes.Column("invoice_number")]
         public string? InvoiceNumber { get; set; }

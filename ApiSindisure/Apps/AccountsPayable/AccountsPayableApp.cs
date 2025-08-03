@@ -21,10 +21,10 @@ namespace ApiSindisure.Apps.AccountsPayable
                 if (string.IsNullOrEmpty(request.Id))
                     throw new ArgumentException("CondominiumId não pode ser nulo ou vazio.");
 
-                 if (!Guid.TryParse(request.Id, out _))
+                if (!Guid.TryParse(request.Id, out _))
                     throw new Exception("CondominiumId inválido. Deve ser um UUID.");
-                    
-                var client = _supabaseService.GetClient();               
+
+                var client = _supabaseService.GetClient();
 
                 var result = await client
                     .From<AccountsPayableModel>()
@@ -57,10 +57,55 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
         }
 
+        public async Task<List<AccountsPayableViewModel.Response>> GetUpcommingAccountsPayableAsync(AccountsPayableViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("CondominiumId não pode ser nulo ou vazio.");
+
+                if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("CondominiumId inválido. Deve ser um UUID.");
+
+                var client = _supabaseService.GetClient();
+
+                var result = await client
+                    .From<AccountsPayableModel>()
+                    .Select("*")
+                    .Filter("condominium_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Not("companies_recurring_id", Supabase.Postgrest.Constants.Operator.Is, "null")
+                    .Order("due_date", Supabase.Postgrest.Constants.Ordering.Descending)
+                    .Get();
+
+
+                return result.Models.Select(model => new AccountsPayableViewModel.Response
+                {
+                    Id = model.Id,
+                    Description = model.Description,
+                    Amount = model.Amount,
+                    DueDate = model.DueDate,
+                    Status = model.Status,
+                    Company = model.Company,
+                    InvoiceNumber = model.InvoiceNumber,
+                    Category = model.Category,
+                    Notes = model.Notes,
+                    CondominiumId = model.CondominiumId,
+                    FileName = model.FileName,
+                    FileUrl = model.FileUrl,
+                    CreatedAt = model.CreatedAt,
+                    UpdatedAt = model.UpdatedAt
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
+
         public async Task<AccountsPayableViewModel.Response> CreateAccountsPayableAsync(AccountsPayableViewModel.CreateRequest request, CancellationToken cancellationToken)
         {
             try
-            {                
+            {
                 var client = _supabaseService.GetClient();
                 var model = new AccountsPayableModel
                 {
@@ -164,6 +209,49 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
         }
 
+        public async Task<AccountsPayableViewModel.Response> UpdateAccountsPayableStatusAsync(AccountsPayableViewModel.UpdateRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var client = _supabaseService.GetClient();
+                var model = new AccountsPayableModel
+                {
+                    Id = request.Id,
+                    Status = request.Status,
+                };
+
+                var result = await client
+                    .From<AccountsPayableModel>()
+                    .Where(x => x.Id == request.Id)
+                    .Update(model);
+
+                var updatedModel = result.Models.First();
+
+                return new AccountsPayableViewModel.Response
+                {
+                    Id = updatedModel.Id,
+                    Description = updatedModel.Description,
+                    Amount = updatedModel.Amount,
+                    DueDate = updatedModel.DueDate,
+                    Status = updatedModel.Status,
+                    Company = updatedModel.Company,
+                    InvoiceNumber = updatedModel.InvoiceNumber,
+                    Category = updatedModel.Category,
+                    Notes = updatedModel.Notes,
+                    CreateBy = updatedModel.CreateBy,
+                    CondominiumId = updatedModel.CondominiumId,
+                    FileName = updatedModel.FileName,
+                    FileUrl = updatedModel.FileUrl,
+                    CreatedAt = updatedModel.CreatedAt,
+                    UpdatedAt = updatedModel.UpdatedAt
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao atualizar conta a pagar", ex);
+            }
+        }
+
         public async Task DeleteAccountsPayableAsync(AccountsPayableViewModel.DeleteRequest request, CancellationToken cancellationToken)
         {
             try
@@ -172,6 +260,23 @@ namespace ApiSindisure.Apps.AccountsPayable
                 await client
                     .From<AccountsPayableModel>()
                     .Where(x => x.Id == request.Id)
+                    .Delete();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao excluir conta a pagar", ex);
+            }
+        }
+        
+        public async Task DeleteUpcommingAccountsPayableAsync(AccountsPayableViewModel.DeleteRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {           
+                var client = _supabaseService.GetClient();
+                await client
+                    .From<AccountsPayableModel>()
+                    .Where(x => x.Id == request.Id)
+                    .Not("companies_recurring_id", Supabase.Postgrest.Constants.Operator.Is, "null")
                     .Delete();
             }
             catch (Exception ex)
