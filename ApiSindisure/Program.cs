@@ -18,6 +18,8 @@ using ApiSindisure.Domain.Interfaces.Apps.Buildings;
 using ApiSindisure.Apps.Buildings;
 using ApiSindisure.Domain.Interfaces.Apps.Companies;
 using ApiSindisure.Apps.Companies;
+using ApiSindisure.Domain.Interfaces.Apps.CompaniesRecurring;
+using ApiSindisure.Apps.CompaniesRecurring;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,7 @@ builder.Services.AddSingleton<ICondominiumApp, CondominiumApp>();
 builder.Services.AddSingleton<IBuildingsApp, BuildingsApp>();
 builder.Services.AddSingleton<ICompaniesApp, CompaniesApp>();
 builder.Services.AddSingleton<IAuditApp, AuditApp>();
+builder.Services.AddSingleton<ICompaniesRecurringApp, CompaniesRecurringApp>();
 
 builder.Services.AddCors(options =>
 {

@@ -32,6 +32,28 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType<List<AccountsPayableViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAccountsPayablePendingRecurring(
+             string id,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                    return BadRequest(new { error = "CondominiumId não pode ser nulo ou vazio." });
+
+                var request = new AccountsPayableViewModel.GetRequest { Id = id };
+                var response = await app.GetAccountsPayablePendingRecurringAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar contas a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpGet("GetUpcommingAccountsPayable")]
         [ProducesResponseType<List<AccountsPayableViewModel.Response>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -36,6 +36,44 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType<List<CompaniesRecurringViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUniqueCompaniesRecurring(   
+            string id,         
+            [FromServices] ICompaniesRecurringApp app)
+        {
+            try
+            {
+                var request = new CompaniesRecurringViewModel.GetRequest { Id = id};
+                var response = await app.GetUniqueCompaniesRecurringAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar fornecedores. Mais detalhes: " + ex.Message });
+            }
+        }
+
+        [HttpGet("GetCompaniesRecurringIsActive/{id}")]
+        [ProducesResponseType<List<CompaniesRecurringViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCompaniesRecurringIsActive(
+             string id,
+            [FromServices] ICompaniesRecurringApp app)
+        {
+            try
+            {
+                var request = new CompaniesRecurringViewModel.GetRequest { Id = id};
+                var response = await app.GetCompaniesRecurringIsActiveAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar fornecedores. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType<CompaniesRecurringViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

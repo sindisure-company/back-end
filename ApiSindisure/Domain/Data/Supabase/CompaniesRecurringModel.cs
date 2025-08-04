@@ -1,5 +1,5 @@
 
-[Supabase.Postgrest.Attributes.Table("CompaniesRecurring")]
+[Supabase.Postgrest.Attributes.Table("companies_recurring")]
 public class CompaniesRecurringModel : Supabase.Postgrest.Models.BaseModel
 {
     [Supabase.Postgrest.Attributes.PrimaryKey("id")]

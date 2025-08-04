@@ -56,11 +56,94 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
+        
+        public async Task<CompaniesRecurringViewModel.Response> GetUniqueCompaniesRecurringAsync(CompaniesRecurringViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("CompaniesRecurringId não pode ser nulo ou vazio.");
+
+                 if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("CompaniesRecurringId inválido. Deve ser um UUID.");
+                    
+                var client = _supabaseService.GetClient();               
+
+                var result = await client
+                    .From<CompaniesRecurringModel>()
+                    .Select("*")
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                return result.Models.Select(model => new CompaniesRecurringViewModel.Response
+                {
+                    Id = model.Id,
+                    Amount = model.Amount,
+                    Category = model.Category,
+                    CondominiumId = model.CondominiumId,
+                    Description = model.Description,
+                    DueDay = model.DueDay,
+                    IsActive = model.IsActive,
+                    Notes = model.Notes,
+                    RecurrenceType = model.RecurrenceType,  
+                    CreatedBy = model.CreatedBy,                 
+                    CreatedAt = model.CreatedAt,
+                    UpdatedAt = model.UpdatedAt
+                }).FirstOrDefault() ;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
+        
+        public async Task<List<CompaniesRecurringViewModel.Response>> GetCompaniesRecurringIsActiveAsync(CompaniesRecurringViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("CompaniesRecurringId não pode ser nulo ou vazio.");
+
+                if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("CompaniesRecurringId inválido. Deve ser um UUID.");
+
+                var client = _supabaseService.GetClient();
+
+                var result = await client
+                    .From<CompaniesRecurringModel>()
+                    .Select("*")
+                    .Filter("condominium_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Filter("is_active", Supabase.Postgrest.Constants.Operator.Is, "true")
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                return result.Models.Select(model => new CompaniesRecurringViewModel.Response
+                {
+                    Id = model.Id,
+                    Amount = model.Amount,
+                    Category = model.Category,
+                    CondominiumId = model.CondominiumId,
+                    Description = model.Description,
+                    DueDay = model.DueDay,
+                    IsActive = model.IsActive,
+                    Notes = model.Notes,
+                    RecurrenceType = model.RecurrenceType,
+                    CreatedBy = model.CreatedBy,
+                    CreatedAt = model.CreatedAt,
+                    UpdatedAt = model.UpdatedAt
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
 
         public async Task<CompaniesRecurringViewModel.Response> CreateCompaniesRecurringAsync(CompaniesRecurringViewModel.CreateRequest request, CancellationToken cancellationToken)
         {
             try
-            {                
+            {
                 var client = _supabaseService.GetClient();
                 var model = new CompaniesRecurringModel
                 {
@@ -72,7 +155,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                     IsActive = request.IsActive,
                     Notes = request.Notes,
                     RecurrenceType = request.RecurrenceType,
-                    CreatedBy = request.CreatedBy,                 
+                    CreatedBy = request.CreatedBy,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
@@ -94,7 +177,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                     IsActive = createdModel.IsActive,
                     Notes = createdModel.Notes,
                     RecurrenceType = createdModel.RecurrenceType,
-                    CreatedBy = createdModel.CreatedBy,                 
+                    CreatedBy = createdModel.CreatedBy,
                     CreatedAt = createdModel.CreatedAt,
                     UpdatedAt = createdModel.UpdatedAt
                 };

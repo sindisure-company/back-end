@@ -88,6 +88,28 @@ namespace ApiSindisure.Domain.ViewModel.AccountsReceivable
 
         public class DeleteRequest : BaseEntity
         {}
+        
+        public class UpdateManyRequest 
+        {
+            [JsonPropertyName("updates")]
+            public List<UpdateItem> Updates { get; set; }
+            public string? CondominiumId { get; set; }
+
+            public class UpdateItem 
+            {
+                [JsonPropertyName("id")]
+                public string? Id { get; set; }
+
+                [JsonPropertyName("amount")]
+                public decimal Amount { get; set; }
+
+                [JsonPropertyName("due_day")]
+                public int DueDay { get; set; }
+
+                [JsonPropertyName("notes")]
+                public string Notes { get; set; }
+            }
+        }
 
         public class Response : BaseEntity
         {
@@ -106,7 +128,7 @@ namespace ApiSindisure.Domain.ViewModel.AccountsReceivable
             [Required]
             [JsonPropertyName("status")]
             public string Status { get; set; }
-            
+
             [JsonPropertyName("company")]
             public string? Company { get; set; }
 
@@ -126,10 +148,10 @@ namespace ApiSindisure.Domain.ViewModel.AccountsReceivable
             [Required]
             [JsonPropertyName("condominium_id")]
             public string CondominiumId { get; set; }
-            
+
             [JsonPropertyName("file_name")]
             public string? FileName { get; set; }
-            
+
             [JsonPropertyName("file_url")]
             public string? FileUrl { get; set; }
             public DateTime CreatedAt { get; set; }

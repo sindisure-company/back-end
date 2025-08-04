@@ -57,6 +57,50 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
         }
 
+        public async Task<List<AccountsPayableViewModel.Response>> GetAccountsPayablePendingRecurringAsync(AccountsPayableViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("CondominiumId não pode ser nulo ou vazio.");
+
+                if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("CondominiumId inválido. Deve ser um UUID.");
+
+                var client = _supabaseService.GetClient();
+
+                var result = await client
+                    .From<AccountsPayableModel>()
+                    .Select("*")
+                    .Filter("companies_recurring_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Filter("status", Supabase.Postgrest.Constants.Operator.Equals, "pending")
+                    .Order("due_date", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                return result.Models.Select(model => new AccountsPayableViewModel.Response
+                {
+                    Id = model.Id,
+                    Description = model.Description,
+                    Amount = model.Amount,
+                    DueDate = model.DueDate,
+                    Status = model.Status,
+                    Company = model.Company,
+                    InvoiceNumber = model.InvoiceNumber,
+                    Category = model.Category,
+                    Notes = model.Notes,
+                    CondominiumId = model.CondominiumId,
+                    FileName = model.FileName,
+                    FileUrl = model.FileUrl,
+                    CreatedAt = model.CreatedAt,
+                    UpdatedAt = model.UpdatedAt
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
+
         public async Task<List<AccountsPayableViewModel.Response>> GetUpcommingAccountsPayableAsync(AccountsPayableViewModel.GetRequest request, CancellationToken cancellationToken)
         {
             try

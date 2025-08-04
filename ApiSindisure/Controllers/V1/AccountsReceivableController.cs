@@ -21,8 +21,8 @@ namespace ApiSindisure.Controllers.V1
             {
                 if (string.IsNullOrEmpty(condominiumId))
                     return BadRequest(new { error = "CondominiumId não pode ser nulo ou vazio." });
-                
-                var request = new AccountsReceivableViewModel.GetRequest { Id = condominiumId};
+
+                var request = new AccountsReceivableViewModel.GetRequest { Id = condominiumId };
                 var response = await app.GetAccountsReceivableAsync(request, CancellationToken.None);
                 return Ok(response);
             }
@@ -70,6 +70,25 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpPut("UpdateAccountsReceivablePendingFees")]
+        [ProducesResponseType<AccountsReceivableViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateAccountsReceivablePendingFees(
+            [FromBody] AccountsReceivableViewModel.UpdateManyRequest request,
+            [FromServices] IAccountsReceivableApp app)
+        {
+            try
+            {
+                var response = await app.UpdateAccountsReceivablePendingFeesAsync(request, CancellationToken.None);
+                
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao atualizar conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -81,6 +100,25 @@ namespace ApiSindisure.Controllers.V1
             {
                 var request = new AccountsReceivableViewModel.DeleteRequest { Id = id };
                 await app.DeleteAccountsReceivableAsync(request, CancellationToken.None);
+                return Ok(new { message = "Conta a pagar excluída com sucesso" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao excluir conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+        
+        [HttpDelete("DeleteAccountsReceivablePending/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteAccountsReceivablePending(
+            string id,
+            [FromServices] IAccountsReceivableApp app)
+        {
+            try
+            {
+                var request = new AccountsReceivableViewModel.DeleteRequest { Id = id };
+                await app.DeleteAccountsReceivablePendingAsync(request, CancellationToken.None);
                 return Ok(new { message = "Conta a pagar excluída com sucesso" });
             }
             catch (Exception ex)
