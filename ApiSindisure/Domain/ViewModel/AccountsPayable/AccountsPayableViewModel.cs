@@ -46,6 +46,9 @@ namespace ApiSindisure.Domain.ViewModel.AccountsPayable
             [Required]
             [JsonPropertyName("condominium_id")]
             public string CondominiumId { get; set; }
+      
+            [JsonPropertyName("companies_recurring_id")]
+            public string? CompaniesRecurringId { get; set; }
             
             [JsonPropertyName("file_name")]
             public string? FileName { get; set; }
@@ -65,7 +68,7 @@ namespace ApiSindisure.Domain.ViewModel.AccountsPayable
             [Required]
             public string Status { get; set; }
 
-            public string? Company { get; set; }            
+            public string? Company { get; set; }
 
             [Required]
             public string Category { get; set; }
@@ -84,6 +87,9 @@ namespace ApiSindisure.Domain.ViewModel.AccountsPayable
             [Required]
             [JsonPropertyName("condominium_id")]
             public string CondominiumId { get; set; }
+            
+            [JsonPropertyName("companies_recurring_id")]
+            public string? CompaniesRecurringId { get; set; }
         }
 
         public class DeleteRequest : BaseEntity
@@ -126,6 +132,9 @@ namespace ApiSindisure.Domain.ViewModel.AccountsPayable
             [Required]
             [JsonPropertyName("condominium_id")]
             public string CondominiumId { get; set; }
+
+            [JsonPropertyName("companies_recurring_id")]
+            public string? CompaniesRecurringId { get; set; }
             
             [JsonPropertyName("file_name")]
             public string? FileName { get; set; }

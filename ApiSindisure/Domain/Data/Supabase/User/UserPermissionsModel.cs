@@ -4,7 +4,7 @@ public class UserPermissionsModel : Supabase.Postgrest.Models.BaseModel
     [Supabase.Postgrest.Attributes.PrimaryKey("id")]
     public string Id { get; set; }
 
-    [Supabase.Postgrest.Attributes.Column("roles")]
+    [Supabase.Postgrest.Attributes.Column("role")]
     public string? Roles { get; set; }
 
     [Supabase.Postgrest.Attributes.Column("updated_at")]

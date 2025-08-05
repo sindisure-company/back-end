@@ -94,6 +94,24 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpPost("CreateRecurringAccountsPayable")]
+        [ProducesResponseType<AccountsPayableViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateRecurringAccountsPayable(
+            [FromBody] List<AccountsPayableViewModel.CreateRequest> request,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                var response = await app.CreateRecurringAccountsPayableAsync(request, CancellationToken.None);
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao criar conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpPut("{id}")]
         [ProducesResponseType<AccountsPayableViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

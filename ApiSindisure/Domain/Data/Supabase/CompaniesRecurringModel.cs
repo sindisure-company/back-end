@@ -5,6 +5,9 @@ public class CompaniesRecurringModel : Supabase.Postgrest.Models.BaseModel
     [Supabase.Postgrest.Attributes.PrimaryKey("id")]
     public string Id { get; set; }
 
+    [Supabase.Postgrest.Attributes.Column("company_id")]
+    public string? CompanyId { get; set; }
+
     [Supabase.Postgrest.Attributes.Column("amount")]
     public decimal Amount { get; set; }
 

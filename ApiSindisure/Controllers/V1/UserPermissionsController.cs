@@ -36,6 +36,25 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType<List<UserPermissionsViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUniqueUserPermissions( 
+            string id,           
+            [FromServices] IUserPermissionsApp app)
+        {
+            try
+            {
+                var request = new UserPermissionsViewModel.GetRequest { Id = id};
+                var response = await app.GetUniqueUserPermissionsAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar fornecedores. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType<UserPermissionsViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

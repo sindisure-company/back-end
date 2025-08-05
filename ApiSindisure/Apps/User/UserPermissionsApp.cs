@@ -48,11 +48,50 @@ namespace ApiSindisure.Apps.UserPermissions
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
+        
+        public async Task<UserPermissionsViewModel.Response> GetUniqueUserPermissionsAsync(UserPermissionsViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("UserPermissionsId não pode ser nulo ou vazio.");
+
+                 if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("UserPermissionsId inválido. Deve ser um UUID.");
+                    
+                var client = _supabaseService.GetClient();               
+
+                var result = await client
+                    .From<UserPermissionsModel>()
+                    .Select("*")
+                    .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                if (result.Models.Count == 0)
+                    throw new Exception("Nenhum registro encontrado para o UserPermissionsId fornecido.");
+
+                var resultRoles = result.Models.First();
+
+                return new UserPermissionsViewModel.Response
+                {
+                    Id = resultRoles.Id,
+                    Roles = resultRoles.Roles,
+                    CreatedAt = resultRoles.CreatedAt,
+                    UpdatedAt = resultRoles.UpdatedAt,
+                    UserId = resultRoles.UserId
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
 
         public async Task<UserPermissionsViewModel.Response> CreateUserPermissionsAsync(UserPermissionsViewModel.CreateRequest request, CancellationToken cancellationToken)
         {
             try
-            {                
+            {
                 var client = _supabaseService.GetClient();
                 var model = new UserPermissionsModel
                 {

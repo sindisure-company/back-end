@@ -32,6 +32,9 @@
         [Supabase.Postgrest.Attributes.Column("condominium_id")]
         public string CondominiumId { get; set; }
 
+        [Supabase.Postgrest.Attributes.Column("companies_recurring_id")]
+        public string? CompaniesRecurringId { get; set; }
+
         [Supabase.Postgrest.Attributes.Column("created_by")]
         public string CreateBy { get; set; }
 

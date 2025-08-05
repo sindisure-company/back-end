@@ -14,6 +14,10 @@ namespace ApiSindisure.Domain.ViewModel.CompaniesRecurringViewModel
             [Required]        
             [JsonPropertyName("amount")]
             public decimal Amount { get; set; }
+            
+            [Required]        
+            [JsonPropertyName("company_id")]
+            public string? CompanyId { get; set; }
 
             [Required]
             [JsonPropertyName("category")]
@@ -53,6 +57,10 @@ namespace ApiSindisure.Domain.ViewModel.CompaniesRecurringViewModel
             [Required]        
             [JsonPropertyName("amount")]
             public decimal Amount { get; set; }
+
+            [Required]        
+            [JsonPropertyName("company_id")]
+            public string? CompanyId { get; set; }
 
             [Required]
             [JsonPropertyName("category")]
@@ -94,6 +102,10 @@ namespace ApiSindisure.Domain.ViewModel.CompaniesRecurringViewModel
             [Required]        
             [JsonPropertyName("amount")]
             public decimal Amount { get; set; }
+
+            [Required]        
+            [JsonPropertyName("company_id")]
+            public string? CompanyId { get; set; }
 
             [Required]
             [JsonPropertyName("category")]

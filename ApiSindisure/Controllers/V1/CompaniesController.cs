@@ -36,6 +36,25 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType<List<CompaniesViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUniqueCompanies(     
+            string id,       
+            [FromServices] ICompaniesApp app)
+        {
+            try
+            {
+                var request = new CompaniesViewModel.GetRequest { Id = id};
+                var response = await app.GetUniqueCompaniesAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar fornecedores. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType<CompaniesViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

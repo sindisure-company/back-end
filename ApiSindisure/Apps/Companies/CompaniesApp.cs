@@ -58,10 +58,54 @@ namespace ApiSindisure.Apps.Companies
             }
         }
 
+        public async Task<CompaniesViewModel.Response> GetUniqueCompaniesAsync(CompaniesViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("CompaniesId não pode ser nulo ou vazio.");
+
+                 if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("CompaniesId inválido. Deve ser um UUID.");
+                    
+                var client = _supabaseService.GetClient();               
+
+                var result = await client
+                    .From<CompaniesModel>()
+                    .Select("*")
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+                    
+                var resultCompanie = result.Models.First();
+
+                return new CompaniesViewModel.Response
+                {
+                    Id = resultCompanie.Id,
+                    Address = resultCompanie.Address,
+                    Category = resultCompanie.Category,
+                    Document = resultCompanie.Document,
+                    Email = resultCompanie.Email,
+                    Name = resultCompanie.Name,
+                    Notes = resultCompanie.Notes,
+                    PersonalContact = resultCompanie.PersonalContact,
+                    Phone = resultCompanie.Phone,
+                    Status = resultCompanie.Status,
+                    CreatedBy = resultCompanie.CreatedBy,
+                    CreatedAt = resultCompanie.CreatedAt,
+                    UpdatedAt = resultCompanie.UpdatedAt
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
+
         public async Task<CompaniesViewModel.Response> CreateCompaniesAsync(CompaniesViewModel.CreateRequest request, CancellationToken cancellationToken)
         {
             try
-            {                
+            {
                 var client = _supabaseService.GetClient();
                 var model = new CompaniesModel
                 {
@@ -73,9 +117,9 @@ namespace ApiSindisure.Apps.Companies
                     Name = request.Name,
                     Notes = request.Notes,
                     PersonalContact = request.PersonalContact,
-                    Phone = request.Phone,                    
+                    Phone = request.Phone,
                     Status = request.Status,
-                    CreatedBy = request.CreatedBy,                 
+                    CreatedBy = request.CreatedBy,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
@@ -96,9 +140,9 @@ namespace ApiSindisure.Apps.Companies
                     Name = createdModel.Name,
                     Notes = createdModel.Notes,
                     PersonalContact = createdModel.PersonalContact,
-                    Phone = createdModel.Phone,                    
+                    Phone = createdModel.Phone,
                     Status = createdModel.Status,
-                    CreatedBy = createdModel.CreatedBy,                 
+                    CreatedBy = createdModel.CreatedBy,
                     CreatedAt = createdModel.CreatedAt,
                     UpdatedAt = createdModel.UpdatedAt
                 };

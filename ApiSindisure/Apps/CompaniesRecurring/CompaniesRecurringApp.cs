@@ -46,6 +46,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                     IsActive = model.IsActive,
                     Notes = model.Notes,
                     RecurrenceType = model.RecurrenceType,  
+                    CompanyId = model.CompanyId,
                     CreatedBy = model.CreatedBy,                 
                     CreatedAt = model.CreatedAt,
                     UpdatedAt = model.UpdatedAt
@@ -79,6 +80,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                 return result.Models.Select(model => new CompaniesRecurringViewModel.Response
                 {
                     Id = model.Id,
+                    CompanyId = model.CompanyId,
                     Amount = model.Amount,
                     Category = model.Category,
                     CondominiumId = model.CondominiumId,
@@ -113,7 +115,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                 var result = await client
                     .From<CompaniesRecurringModel>()
                     .Select("*")
-                    .Filter("condominium_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
                     .Filter("is_active", Supabase.Postgrest.Constants.Operator.Is, "true")
                     .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
                     .Get();
@@ -121,6 +123,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                 return result.Models.Select(model => new CompaniesRecurringViewModel.Response
                 {
                     Id = model.Id,
+                    CompanyId = model.CompanyId,
                     Amount = model.Amount,
                     Category = model.Category,
                     CondominiumId = model.CondominiumId,
@@ -149,6 +152,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                 {
                     Amount = request.Amount,
                     Category = request.Category,
+                    CompanyId = request.CompanyId,
                     CondominiumId = request.CondominiumId,
                     Description = request.Description,
                     DueDay = request.DueDay,
@@ -169,6 +173,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                 return new CompaniesRecurringViewModel.Response
                 {
                     Id = createdModel.Id,
+                    CompanyId = createdModel.CompanyId,
                     Amount = createdModel.Amount,
                     Category = createdModel.Category,
                     CondominiumId = createdModel.CondominiumId,
@@ -196,6 +201,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                 var model = new CompaniesRecurringModel
                 {
                     Id = request.Id,
+                    CompanyId = request.CompanyId,
                     Amount = request.Amount,
                     Category = request.Category,
                     CondominiumId = request.CondominiumId,
@@ -218,6 +224,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
                 return new CompaniesRecurringViewModel.Response
                 {
                     Id = updatedModel.Id,
+                    CompanyId = updatedModel.CompanyId,
                     Amount = updatedModel.Amount,
                     Category = updatedModel.Category,
                     CondominiumId = updatedModel.CondominiumId,

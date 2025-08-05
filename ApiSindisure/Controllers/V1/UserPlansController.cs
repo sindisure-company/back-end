@@ -36,6 +36,25 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType<List<UserPlansViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUniqueUserPlans(  
+            string id,          
+            [FromServices] IUserPlansApp app)
+        {
+            try
+            {     
+                var request = new UserPlansViewModel.GetRequest { Id = id};
+                var response = await app.GetUniqueUserPlansAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar planos. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType<UserPlansViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

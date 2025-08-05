@@ -52,11 +52,53 @@ namespace ApiSindisure.Apps.UserPlans
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
+        
+        public async Task<UserPlansViewModel.Response> GetUniqueUserPlansAsync(UserPlansViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("UserPlansId não pode ser nulo ou vazio.");
+
+                 if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("UserPlansId inválido. Deve ser um UUID.");
+                    
+                var client = _supabaseService.GetClient();               
+
+                var result = await client
+                    .From<UserPlansModel>()
+                    .Select("*")
+                    .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                if (result.Models.Count == 0)
+                    throw new Exception("Nenhum registro encontrado para o UserPlansId fornecido.");
+
+                var resultPlan = result.Models.First();
+
+                return new UserPlansViewModel.Response
+                {
+                    Id = resultPlan.Id,
+                    PaymentDate = resultPlan.PaymentDate,
+                    PlanName = resultPlan.PlanName,
+                    PlanValue = resultPlan.PlanValue,
+                    Status = resultPlan.Status,
+                    CreatedAt = resultPlan.CreatedAt,
+                    UpdatedAt = resultPlan.UpdatedAt,
+                    UserId = resultPlan.UserId
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
 
         public async Task<UserPlansViewModel.Response> CreateUserPlansAsync(UserPlansViewModel.CreateRequest request, CancellationToken cancellationToken)
         {
             try
-            {                
+            {
                 var client = _supabaseService.GetClient();
                 var model = new UserPlansModel
                 {

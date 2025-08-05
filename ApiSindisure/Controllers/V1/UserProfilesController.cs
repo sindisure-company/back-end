@@ -36,6 +36,25 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType<List<UserProfilesViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUniqueUserProfiles( 
+            string id,           
+            [FromServices] IUserProfilesApp app)
+        {
+            try
+            {    
+                var request = new UserProfilesViewModel.GetRequest { Id = id};
+                var response = await app.GetUniqueUserProfilesAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar fornecedores. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType<UserProfilesViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

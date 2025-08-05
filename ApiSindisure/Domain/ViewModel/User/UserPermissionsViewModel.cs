@@ -12,12 +12,8 @@ namespace ApiSindisure.Domain.ViewModel.UserPermissionsViewModel
         public class CreateRequest
         {   
             [Required]        
-            [JsonPropertyName("amount")]
+            [JsonPropertyName("roles")]
             public string? Roles { get; set; }
-
-            [Required]
-            [JsonPropertyName("category")]
-            public string? UpdatedAt { get; set; }
 
             [Required]
             [JsonPropertyName("user_id")]
@@ -28,12 +24,8 @@ namespace ApiSindisure.Domain.ViewModel.UserPermissionsViewModel
         public class UpdateRequest : BaseEntity
         {
             [Required]        
-            [JsonPropertyName("amount")]
-            public string? Roles { get; set; }
-
-            [Required]
-            [JsonPropertyName("updated_at")]
-            public string? UpdatedAt { get; set; }
+            [JsonPropertyName("roles")]
+            public string? Roles { get; set; }       
 
             [Required]
             [JsonPropertyName("user_id")]
@@ -47,7 +39,7 @@ namespace ApiSindisure.Domain.ViewModel.UserPermissionsViewModel
         public class Response : BaseEntity
         {
             [Required]        
-            [JsonPropertyName("amount")]
+            [JsonPropertyName("roles")]
             public string? Roles { get; set; }
 
             [Required]
@@ -55,7 +47,7 @@ namespace ApiSindisure.Domain.ViewModel.UserPermissionsViewModel
             public DateTime UpdatedAt { get; set; }
 
             [Required]
-            [JsonPropertyName("category")]
+            [JsonPropertyName("created_at")]
             public DateTime CreatedAt { get; set; }
 
             [Required]

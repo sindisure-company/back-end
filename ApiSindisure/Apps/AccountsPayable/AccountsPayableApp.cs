@@ -45,6 +45,7 @@ namespace ApiSindisure.Apps.AccountsPayable
                     Category = model.Category,
                     Notes = model.Notes,
                     CondominiumId = model.CondominiumId,
+                    CompaniesRecurringId = model.CompaniesRecurringId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
                     CreatedAt = model.CreatedAt,
@@ -89,6 +90,7 @@ namespace ApiSindisure.Apps.AccountsPayable
                     Category = model.Category,
                     Notes = model.Notes,
                     CondominiumId = model.CondominiumId,
+                    CompaniesRecurringId = model.CompaniesRecurringId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
                     CreatedAt = model.CreatedAt,
@@ -134,6 +136,7 @@ namespace ApiSindisure.Apps.AccountsPayable
                     Category = model.Category,
                     Notes = model.Notes,
                     CondominiumId = model.CondominiumId,
+                    CompaniesRecurringId = model.CompaniesRecurringId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
                     CreatedAt = model.CreatedAt,
@@ -162,6 +165,7 @@ namespace ApiSindisure.Apps.AccountsPayable
                     Category = request.Category,
                     Notes = request.Notes,
                     CondominiumId = request.CondominiumId,
+                    CompaniesRecurringId = request.CompaniesRecurringId,
                     CreateBy = request.CreateBy,
                     FileName = request.FileName,
                     FileUrl = request.FileUrl,
@@ -192,6 +196,66 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CreatedAt = createdModel.CreatedAt,
                     UpdatedAt = createdModel.UpdatedAt
                 };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao criar conta a pagar", ex);
+            }
+        }
+
+        public async Task<List<AccountsPayableViewModel.Response>> CreateRecurringAccountsPayableAsync(List<AccountsPayableViewModel.CreateRequest> request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var listPayables = new List<AccountsPayableViewModel.Response>();
+                var client = _supabaseService.GetClient();
+
+                foreach (var item in request)
+                {
+                    var model = new AccountsPayableModel
+                    {
+                        Description = item.Description,
+                        Amount = item.Amount,
+                        DueDate = item.DueDate,
+                        Status = item.Status,
+                        Company = item.Company,
+                        InvoiceNumber = item.InvoiceNumber,
+                        Category = item.Category,
+                        Notes = item.Notes,
+                        CondominiumId = item.CondominiumId,
+                        CompaniesRecurringId = item.CompaniesRecurringId,
+                        CreateBy = item.CreateBy,
+                        FileName = item.FileName,
+                        FileUrl = item.FileUrl,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    };
+
+                    var result = await client
+                        .From<AccountsPayableModel>()
+                        .Insert(model);
+
+                    var createdModel = result.Models.First();
+                    listPayables.Add(new AccountsPayableViewModel.Response
+                    {
+                        Id = createdModel.Id,
+                        Description = createdModel.Description,
+                        Amount = createdModel.Amount,
+                        DueDate = createdModel.DueDate,
+                        Status = createdModel.Status,
+                        Company = createdModel.Company,
+                        InvoiceNumber = createdModel.InvoiceNumber,
+                        Category = createdModel.Category,
+                        Notes = createdModel.Notes,
+                        CondominiumId = createdModel.CondominiumId,
+                        FileName = createdModel.FileName,
+                        FileUrl = createdModel.FileUrl,
+                        CreatedAt = createdModel.CreatedAt,
+                        UpdatedAt = createdModel.UpdatedAt
+                    });
+                }
+
+                return listPayables;
             }
             catch (Exception ex)
             {
@@ -284,6 +348,7 @@ namespace ApiSindisure.Apps.AccountsPayable
                     Notes = updatedModel.Notes,
                     CreateBy = updatedModel.CreateBy,
                     CondominiumId = updatedModel.CondominiumId,
+                    CompaniesRecurringId = updatedModel.CompaniesRecurringId,
                     FileName = updatedModel.FileName,
                     FileUrl = updatedModel.FileUrl,
                     CreatedAt = updatedModel.CreatedAt,

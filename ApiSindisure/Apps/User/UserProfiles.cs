@@ -60,10 +60,59 @@ namespace ApiSindisure.Apps.UserProfiles
             }
         }
 
+        public async Task<UserProfilesViewModel.Response> GetUniqueUserProfilesAsync(UserProfilesViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("UserProfilesId não pode ser nulo ou vazio.");
+
+                 if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("UserProfilesId inválido. Deve ser um UUID.");
+                    
+                var client = _supabaseService.GetClient();               
+
+                var result = await client
+                    .From<UserProfilesModel>()
+                    .Select("*")
+                    .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                if (result.Models.Count == 0)
+                    throw new Exception("Nenhum registro encontrado para o UserPermissionsId fornecido.");
+
+                var resultProfile = result.Models.First();
+
+                return new UserProfilesViewModel.Response
+                {
+                    Id = resultProfile.Id,
+                    FirstName = resultProfile.FirstName,
+                    LastName = resultProfile.LastName,
+                    DocumentNumber = resultProfile.DocumentNumber,
+                    DateOfBirth = resultProfile.DateOfBirth,
+                    AvatarUrl = resultProfile.AvatarUrl,
+                    Address = resultProfile.Address,
+                    Number = resultProfile.Number,
+                    Neighborhood = resultProfile.Neighborhood,
+                    City = resultProfile.City,
+                    State = resultProfile.State,
+                    Phone = resultProfile.Phone,
+                    CreatedAt = resultProfile.CreatedAt,
+                    UpdatedAt = resultProfile.UpdatedAt,
+                    UserId = resultProfile.UserId
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar profile", ex);
+            }
+        }
+
         public async Task<UserProfilesViewModel.Response> CreateUserProfilesAsync(UserProfilesViewModel.CreateRequest request, CancellationToken cancellationToken)
         {
             try
-            {                
+            {
                 var client = _supabaseService.GetClient();
                 var model = new UserProfilesModel
                 {
