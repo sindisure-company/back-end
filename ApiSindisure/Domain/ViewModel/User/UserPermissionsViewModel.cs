@@ -20,7 +20,7 @@ namespace ApiSindisure.Domain.ViewModel.UserPermissionsViewModel
             public string? UpdatedAt { get; set; }
 
             [Required]
-            [JsonPropertyName("condominium_id")]
+            [JsonPropertyName("user_id")]
             public string? UserId { get; set; }
          
         }
@@ -32,7 +32,7 @@ namespace ApiSindisure.Domain.ViewModel.UserPermissionsViewModel
             public string? Roles { get; set; }
 
             [Required]
-            [JsonPropertyName("category")]
+            [JsonPropertyName("updated_at")]
             public string? UpdatedAt { get; set; }
 
             [Required]
@@ -51,7 +51,7 @@ namespace ApiSindisure.Domain.ViewModel.UserPermissionsViewModel
             public string? Roles { get; set; }
 
             [Required]
-            [JsonPropertyName("category")]
+            [JsonPropertyName("updated_at")]
             public DateTime UpdatedAt { get; set; }
 
             [Required]
