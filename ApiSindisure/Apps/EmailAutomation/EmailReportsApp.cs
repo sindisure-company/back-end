@@ -6,6 +6,9 @@ using ApiSindisure.Domain.ViewModel.EmailViewModel;
 using ApiSindisure.Domain.ViewModel.UserDetailsViewModel;
 using ApiSindisure.Services.Supabase;
 using Resend;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace ApiSindisure.Apps.EmailReportsApp
 {
@@ -147,8 +150,29 @@ namespace ApiSindisure.Apps.EmailReportsApp
 
         private byte[] CreateBasicPDF(string content)
         {
-            // Implementação simples de PDF (mesma lógica do Deno)
-            return Encoding.UTF8.GetBytes(content);
+            using var stream = new MemoryStream();
+
+            QuestPDF.Settings.License = LicenseType.Community;
+
+            Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(2, Unit.Centimetre);
+                    page.DefaultTextStyle(x => x.FontSize(12));
+
+                    page.Content()
+                        .PaddingVertical(1, Unit.Centimetre)
+                        .Column(column =>
+                        {
+                            column.Item().Text(content);
+                        });
+                });
+            })
+            .GeneratePdf(stream);
+
+            return stream.ToArray();
         }
     }    
 }
