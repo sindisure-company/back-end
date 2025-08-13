@@ -24,6 +24,13 @@ using ApiSindisure.Domain.Interfaces.Apps.UserPermissions;
 using ApiSindisure.Apps.UserPermissions;
 using ApiSindisure.Domain.Interfaces.Apps.UserPlans;
 using ApiSindisure.Apps.UserPlans;
+using ApiSindisure.Domain.Interfaces.Apps.EmailAutomation;
+using ApiSindisure.Apps.EmailAutomation;
+using ApiSindisure.Domain.Interfaces.Apps.EmailReportsHistory;
+using ApiSindisure.Apps.EmailReportsHistory;
+using ApiSindisure.Domain.Interfaces.Apps.EmailReportsApp;
+using ApiSindisure.Apps.EmailReportsApp;
+using Resend;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +49,10 @@ builder.Services.AddSingleton<IAuditApp, AuditApp>();
 builder.Services.AddSingleton<ICompaniesRecurringApp, CompaniesRecurringApp>();
 builder.Services.AddSingleton<IUserPermissionsApp, UserPermissionsApp>();
 builder.Services.AddSingleton<IUserPlansApp, UserPlansApp>();
+builder.Services.AddSingleton<IEmailAutomationApp, EmailAutomationApp>();
+builder.Services.AddSingleton<IEmailReportsHistoryApp, EmailReportsHistoryApp>();
+builder.Services.AddScoped<IEmailReportsApp, EmailReportsApp>();
+
 
 builder.Services.AddCors(options =>
 {
@@ -67,11 +78,18 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Supabase:Issuer"], 
+        ValidIssuer = builder.Configuration["Supabase:Issuer"],
         ValidAudience = "authenticated",
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
     };
 });
+
+builder.Services.Configure<ResendClientOptions>(options =>
+{
+    options.ApiToken = builder.Configuration["Resend:ApiKey"]; // pega do appsettings.json
+});
+
+builder.Services.AddHttpClient<ResendClient>();
 
 
 var app = builder.Build();
