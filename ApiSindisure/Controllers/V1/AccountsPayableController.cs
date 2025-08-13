@@ -151,6 +151,7 @@ namespace ApiSindisure.Controllers.V1
                 return BadRequest(new { error = "Erro ao atualizar conta a pagar. Mais detalhes: " + ex.Message });
             }
         }
+       
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

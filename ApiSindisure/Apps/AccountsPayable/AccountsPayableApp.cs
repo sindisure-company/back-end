@@ -41,6 +41,7 @@ namespace ApiSindisure.Apps.AccountsPayable
                     DueDate = model.DueDate,
                     Status = model.Status,
                     Company = model.Company,
+                    CreateBy = model.CreateBy,
                     InvoiceNumber = model.InvoiceNumber,
                     Category = model.Category,
                     Notes = model.Notes,
@@ -48,8 +49,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CompaniesRecurringId = model.CompaniesRecurringId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
-                    CreatedAt = model.CreatedAt,
-                    UpdatedAt = model.UpdatedAt
+                    CreatedAt = model.CreatedAt.ToString("yyyy/MM/dd"),
+                    UpdatedAt = model.UpdatedAt.ToString("yyyy/MM/dd")
                 }).ToList();
             }
             catch (Exception ex)
@@ -93,8 +94,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CompaniesRecurringId = model.CompaniesRecurringId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
-                    CreatedAt = model.CreatedAt,
-                    UpdatedAt = model.UpdatedAt
+                    CreatedAt = model.CreatedAt.ToString("yyyy/MM/dd"),
+                    UpdatedAt = model.UpdatedAt.ToString("yyyy/MM/dd")
                 }).ToList();
             }
             catch (Exception ex)
@@ -131,6 +132,7 @@ namespace ApiSindisure.Apps.AccountsPayable
                     Amount = model.Amount,
                     DueDate = model.DueDate,
                     Status = model.Status,
+                    CreateBy = model.CreateBy,
                     Company = model.Company,
                     InvoiceNumber = model.InvoiceNumber,
                     Category = model.Category,
@@ -139,8 +141,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CompaniesRecurringId = model.CompaniesRecurringId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
-                    CreatedAt = model.CreatedAt,
-                    UpdatedAt = model.UpdatedAt
+                    CreatedAt = model.CreatedAt.ToString("yyyy/MM/dd"),
+                    UpdatedAt = model.UpdatedAt.ToString("yyyy/MM/dd")
                 }).ToList();
             }
             catch (Exception ex)
@@ -193,8 +195,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CondominiumId = createdModel.CondominiumId,
                     FileName = createdModel.FileName,
                     FileUrl = createdModel.FileUrl,
-                    CreatedAt = createdModel.CreatedAt,
-                    UpdatedAt = createdModel.UpdatedAt
+                    CreatedAt = createdModel.CreatedAt.ToString("yyyy/MM/dd"),
+                    UpdatedAt = createdModel.UpdatedAt.ToString("yyyy/MM/dd")
                 };
             }
             catch (Exception ex)
@@ -250,8 +252,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                         CondominiumId = createdModel.CondominiumId,
                         FileName = createdModel.FileName,
                         FileUrl = createdModel.FileUrl,
-                        CreatedAt = createdModel.CreatedAt,
-                        UpdatedAt = createdModel.UpdatedAt
+                        CreatedAt = createdModel.CreatedAt.ToString("yyyy/MM/dd"),
+                        UpdatedAt = createdModel.UpdatedAt.ToString("yyyy/MM/dd")
                     });
                 }
 
@@ -277,11 +279,14 @@ namespace ApiSindisure.Apps.AccountsPayable
                     Status = request.Status,
                     Company = request.Company,
                     InvoiceNumber = request.InvoiceNumber,
+                    CompaniesRecurringId = request.CompaniesRecurringId,
+                    CondominiumId = request.CondominiumId,
                     Category = request.Category,
                     Notes = request.Notes,
                     FileName = request.FileName,
                     FileUrl = request.FileUrl,
                     UpdatedAt = DateTime.UtcNow,
+                    CreatedAt = request.CreatedAt,
                     CreateBy = request.CreateBy,
                 };
 
@@ -307,8 +312,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CondominiumId = updatedModel.CondominiumId,
                     FileName = updatedModel.FileName,
                     FileUrl = updatedModel.FileUrl,
-                    CreatedAt = updatedModel.CreatedAt,
-                    UpdatedAt = updatedModel.UpdatedAt
+                    CreatedAt = updatedModel.CreatedAt.ToString("yyyy/MM/dd"),
+                    UpdatedAt = updatedModel.UpdatedAt.ToString("yyyy/MM/dd")
                 };
             }
             catch (Exception ex)
@@ -351,9 +356,75 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CompaniesRecurringId = updatedModel.CompaniesRecurringId,
                     FileName = updatedModel.FileName,
                     FileUrl = updatedModel.FileUrl,
-                    CreatedAt = updatedModel.CreatedAt,
-                    UpdatedAt = updatedModel.UpdatedAt
+                    CreatedAt = updatedModel.CreatedAt.ToString("yyyy/MM/dd"),
+                    UpdatedAt = updatedModel.UpdatedAt.ToString("yyyy/MM/dd")
                 };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao atualizar conta a pagar", ex);
+            }
+        }
+
+        public async Task<List<AccountsPayableViewModel.Response>> UpdateFutureAccountsPayableAsync(List<AccountsPayableViewModel.UpdateRequest> request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var listResult = new List<AccountsPayableViewModel.Response>();
+                var client = _supabaseService.GetClient();
+
+                foreach (var item in request)
+                {
+                    var model = new AccountsPayableModel
+                    {
+                        Id = item.Id,                
+                        Description = item.Description,
+                        Amount = item.Amount,
+                        DueDate = item.DueDate,
+                        Status = item.Status,
+                        Company = item.Company,
+                        InvoiceNumber = item.InvoiceNumber,
+                        Category = item.Category,
+                        Notes = item.Notes,
+                        CreateBy = item.CreateBy,
+                        CondominiumId = item.CondominiumId,
+                        CompaniesRecurringId = item.CompaniesRecurringId,
+                        FileName = item.FileName,
+                        FileUrl = item.FileUrl,                    
+                        UpdatedAt = item.UpdatedAt
+                    };
+
+                    var result = await client
+                        .From<AccountsPayableModel>()
+                        .Where(x => x.Id == item.Id)
+                        .Update(model);
+
+                    var updatedModel = result.Models.First();
+
+                    var objAccountsPayable = new AccountsPayableViewModel.Response
+                    {
+                        Id = updatedModel.Id,
+                        Description = updatedModel.Description,
+                        Amount = updatedModel.Amount,
+                        DueDate = updatedModel.DueDate,
+                        Status = updatedModel.Status,
+                        Company = updatedModel.Company,
+                        InvoiceNumber = updatedModel.InvoiceNumber,
+                        Category = updatedModel.Category,
+                        Notes = updatedModel.Notes,
+                        CreateBy = updatedModel.CreateBy,
+                        CondominiumId = updatedModel.CondominiumId,
+                        CompaniesRecurringId = updatedModel.CompaniesRecurringId,
+                        FileName = updatedModel.FileName,
+                        FileUrl = updatedModel.FileUrl,
+                        CreatedAt = updatedModel.CreatedAt.ToString("yyyy/MM/dd"),
+                        UpdatedAt = updatedModel.UpdatedAt.ToString("yyyy/MM/dd")
+                    };
+
+                    listResult.Add(objAccountsPayable);
+                }
+
+                return listResult;
             }
             catch (Exception ex)
             {
@@ -382,9 +453,10 @@ namespace ApiSindisure.Apps.AccountsPayable
             try
             {           
                 var client = _supabaseService.GetClient();
+                
                 await client
                     .From<AccountsPayableModel>()
-                    .Where(x => x.Id == request.Id)
+                    .Where(x => x.CondominiumId == request.Id)
                     .Not("companies_recurring_id", Supabase.Postgrest.Constants.Operator.Is, "null")
                     .Delete();
             }

@@ -58,18 +58,6 @@ namespace ApiSindisure.Domain.ViewModel.CompaniesRecurringViewModel
             [JsonPropertyName("amount")]
             public decimal Amount { get; set; }
 
-            [Required]        
-            [JsonPropertyName("company_id")]
-            public string? CompanyId { get; set; }
-
-            [Required]
-            [JsonPropertyName("category")]
-            public string? Category { get; set; }
-
-            [Required]
-            [JsonPropertyName("condominium_id")]
-            public string? CondominiumId { get; set; }
-
             [Required]
             [JsonPropertyName("description")]
             public string? Description { get; set; }
@@ -84,14 +72,6 @@ namespace ApiSindisure.Domain.ViewModel.CompaniesRecurringViewModel
 
             [JsonPropertyName("notes")]
             public string? Notes { get; set; }
-
-            [Required]
-            [JsonPropertyName("recurrence_type")]
-            public string RecurrenceType { get; set; }
-
-            [JsonPropertyName("created_by")]
-            public string CreatedBy { get; set; }
-           
         }
 
         public class DeleteRequest : BaseEntity

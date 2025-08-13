@@ -198,19 +198,29 @@ namespace ApiSindisure.Apps.CompaniesRecurring
             try
             {
                 var client = _supabaseService.GetClient();
+
+                var resultGet = await client
+                    .From<CompaniesRecurringModel>()
+                    .Select("*")
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                var retornoGet = resultGet.Models.FirstOrDefault();
+
                 var model = new CompaniesRecurringModel
                 {
                     Id = request.Id,
-                    CompanyId = request.CompanyId,
+                    CompanyId = retornoGet.CompanyId,
+                    CondominiumId = retornoGet.CondominiumId,
                     Amount = request.Amount,
-                    Category = request.Category,
-                    CondominiumId = request.CondominiumId,
+                    Category = retornoGet.Category,
                     Description = request.Description,
                     DueDay = request.DueDay,
                     IsActive = request.IsActive,
+                    RecurrenceType = retornoGet.RecurrenceType,
+                    CreatedBy = retornoGet.CreatedBy, 
                     Notes = request.Notes,
-                    RecurrenceType = request.RecurrenceType,                
-                    CreatedBy = request.CreatedBy,  
                     UpdatedAt = DateTime.UtcNow
                 };               
 
