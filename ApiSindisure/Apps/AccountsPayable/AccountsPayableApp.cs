@@ -270,6 +270,16 @@ namespace ApiSindisure.Apps.AccountsPayable
             try
             {
                 var client = _supabaseService.GetClient();
+
+                var resultGet = await client
+                    .From<AccountsPayableModel>()
+                    .Select("*")
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+                
+                var retornoGet = resultGet.Models.FirstOrDefault();
+
                 var model = new AccountsPayableModel
                 {
                     Id = request.Id,
@@ -286,7 +296,7 @@ namespace ApiSindisure.Apps.AccountsPayable
                     FileName = request.FileName,
                     FileUrl = request.FileUrl,
                     UpdatedAt = DateTime.UtcNow,
-                    CreatedAt = request.CreatedAt,
+                    CreatedAt = retornoGet.CreatedAt,
                     CreateBy = request.CreateBy,
                 };
 
@@ -375,9 +385,18 @@ namespace ApiSindisure.Apps.AccountsPayable
 
                 foreach (var item in request)
                 {
+                     var resultGet = await client
+                    .From<AccountsPayableModel>()
+                    .Select("*")
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, item.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+                
+                    var retornoGet = resultGet.Models.FirstOrDefault();
+
                     var model = new AccountsPayableModel
                     {
-                        Id = item.Id,                
+                        Id = item.Id,
                         Description = item.Description,
                         Amount = item.Amount,
                         DueDate = item.DueDate,
@@ -390,8 +409,9 @@ namespace ApiSindisure.Apps.AccountsPayable
                         CondominiumId = item.CondominiumId,
                         CompaniesRecurringId = item.CompaniesRecurringId,
                         FileName = item.FileName,
-                        FileUrl = item.FileUrl,                    
-                        UpdatedAt = item.UpdatedAt
+                        FileUrl = item.FileUrl,
+                        UpdatedAt = item.UpdatedAt,
+                        CreatedAt = retornoGet.CreatedAt
                     };
 
                     var result = await client

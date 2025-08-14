@@ -69,7 +69,7 @@ namespace ApiSindisure.Domain.ViewModel.AccountsReceivable
             [Required]
             public string Status { get; set; }
 
-            public string? Company { get; set; }            
+            public string? Company { get; set; }
 
             [Required]
             public string Category { get; set; }
@@ -82,16 +82,25 @@ namespace ApiSindisure.Domain.ViewModel.AccountsReceivable
 
             [JsonPropertyName("invoice_number")]
             public string? InvoiceNumber { get; set; }
+
             [Required]
+            [JsonPropertyName("due_date")]
             public DateTime DueDate { get; set; }
+
+            [JsonPropertyName("file_name")]
             public string? FileName { get; set; }
+
+            [JsonPropertyName("file_url")]
             public string? FileUrl { get; set; }
+
             [Required]
             [JsonPropertyName("created_by")]
             public string CreateBy { get; set; }
+
             [Required]
             [JsonPropertyName("condominium_id")]
             public string CondominiumId { get; set; }
+        
         }
 
         public class DeleteRequest : BaseEntity
@@ -166,8 +175,8 @@ namespace ApiSindisure.Domain.ViewModel.AccountsReceivable
 
             [JsonPropertyName("file_url")]
             public string? FileUrl { get; set; }
-            public DateTime CreatedAt { get; set; }
-            public DateTime UpdatedAt { get; set; }
+            public string? CreatedAt { get; set; }
+            public string? UpdatedAt { get; set; }
         }
     }
 }

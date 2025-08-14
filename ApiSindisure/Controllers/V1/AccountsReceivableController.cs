@@ -50,6 +50,24 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpPost("CreateAccountsReceivableBuildings")]
+        [ProducesResponseType<AccountsReceivableViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateAccountsReceivableBuildings(
+            [FromBody] List<AccountsReceivableViewModel.CreateRequest> request,
+            [FromServices] IAccountsReceivableApp app)
+        {
+            try
+            {
+                var response = await app.CreateAccountsReceivableBuildingsAsync(request, CancellationToken.None);
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao criar conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpPut("{id}")]
         [ProducesResponseType<AccountsReceivableViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

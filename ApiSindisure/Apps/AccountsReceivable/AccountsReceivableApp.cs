@@ -47,8 +47,8 @@ namespace ApiSindisure.Apps.AccountsReceivable
                     CondominiumId = model.CondominiumId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
-                    CreatedAt = model.CreatedAt,
-                    UpdatedAt = model.UpdatedAt
+                    CreatedAt = model.CreatedAt.ToString("yyyy/MM/dd"),
+                    UpdatedAt = model.UpdatedAt.ToString("yyyy/MM/dd")
                 }).ToList();
             }
             catch (Exception ex)
@@ -99,9 +99,68 @@ namespace ApiSindisure.Apps.AccountsReceivable
                     CondominiumId = createdModel.CondominiumId,
                     FileName = createdModel.FileName,
                     FileUrl = createdModel.FileUrl,
-                    CreatedAt = createdModel.CreatedAt,
-                    UpdatedAt = createdModel.UpdatedAt
+                    CreatedAt = createdModel.CreatedAt.ToString("yyyy/MM/dd"),
+                    UpdatedAt = createdModel.UpdatedAt.ToString("yyyy/MM/dd")
                 };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao criar conta a pagar", ex);
+            }
+        }
+
+        public async Task<List<AccountsReceivableViewModel.Response>> CreateAccountsReceivableBuildingsAsync(List<AccountsReceivableViewModel.CreateRequest> request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var listAccountsReceivableResponse = new List<AccountsReceivableViewModel.Response>();
+                var client = _supabaseService.GetClient();
+
+                foreach (var item in request)
+                {
+                    var model = new AccountsReceivableModel
+                    {
+                        Description = item.Description,
+                        Amount = item.Amount,
+                        DueDate = item.DueDate,
+                        Status = item.Status,
+                        InvoiceNumber = item.InvoiceNumber,
+                        Payer = item.Payer,
+                        Category = item.Category,
+                        Notes = item.Notes,
+                        CondominiumId = item.CondominiumId,
+                        CreateBy = item.CreateBy,
+                        FileName = item.FileName,
+                        FileUrl = item.FileUrl,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    };
+
+                    var result = await client
+                        .From<AccountsReceivableModel>()
+                        .Insert(model);
+
+                    var createdModel = result.Models.First();
+
+                    listAccountsReceivableResponse.Add(new AccountsReceivableViewModel.Response
+                    {
+                        Id = createdModel.Id,
+                        Description = createdModel.Description,
+                        Amount = createdModel.Amount,
+                        DueDate = createdModel.DueDate,
+                        Status = createdModel.Status,
+                        InvoiceNumber = createdModel.InvoiceNumber,
+                        Category = createdModel.Category,
+                        Notes = createdModel.Notes,
+                        CondominiumId = createdModel.CondominiumId,
+                        FileName = createdModel.FileName,
+                        FileUrl = createdModel.FileUrl,
+                        CreatedAt = createdModel.CreatedAt.ToString("yyyy/MM/dd"),
+                        UpdatedAt = createdModel.UpdatedAt.ToString("yyyy/MM/dd")
+                    });
+                }
+
+                return listAccountsReceivableResponse;
             }
             catch (Exception ex)
             {
@@ -114,10 +173,21 @@ namespace ApiSindisure.Apps.AccountsReceivable
             try
             {
                 var client = _supabaseService.GetClient();
+
+                 var resultGet = await client
+                    .From<AccountsReceivableModel>()
+                    .Select("*")
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+                
+                var retornoGet = resultGet.Models.FirstOrDefault();
+
                 var model = new AccountsReceivableModel
                 {
                     Id = request.Id,
                     Description = request.Description,
+                    CondominiumId = retornoGet.CondominiumId,
                     Amount = request.Amount,
                     DueDate = request.DueDate,
                     Status = request.Status,
@@ -128,6 +198,7 @@ namespace ApiSindisure.Apps.AccountsReceivable
                     FileName = request.FileName,
                     FileUrl = request.FileUrl,
                     UpdatedAt = DateTime.UtcNow,
+                    CreatedAt = retornoGet.CreatedAt,
                     CreateBy = request.CreateBy,
                 };
 
@@ -152,8 +223,8 @@ namespace ApiSindisure.Apps.AccountsReceivable
                     CondominiumId = updatedModel.CondominiumId,
                     FileName = updatedModel.FileName,
                     FileUrl = updatedModel.FileUrl,
-                    CreatedAt = updatedModel.CreatedAt,
-                    UpdatedAt = updatedModel.UpdatedAt
+                    CreatedAt = updatedModel.CreatedAt.ToString("yyyy/MM/dd"),
+                    UpdatedAt = updatedModel.UpdatedAt.ToString("yyyy/MM/dd")
                 };
             }
             catch (Exception ex)
@@ -219,8 +290,8 @@ namespace ApiSindisure.Apps.AccountsReceivable
                         CondominiumId = updated.CondominiumId,
                         FileName = updated.FileName,
                         FileUrl = updated.FileUrl,
-                        CreatedAt = updated.CreatedAt,
-                        UpdatedAt = updated.UpdatedAt
+                        CreatedAt = updated.CreatedAt.ToString("yyyy/MM/dd"),
+                        UpdatedAt = updated.UpdatedAt.ToString("yyyy/MM/dd")
                     });
                 }
 
