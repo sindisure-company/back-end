@@ -39,7 +39,7 @@ namespace ApiSindisure.Domain.ViewModel.NotificationHistoryViewModel
             public string? NotificationType { get; set; }
 
             [JsonPropertyName("viewed_at")]
-            public string? ViewedAt { get; set; }
+            public DateTime ViewedAt { get; set; }
 
             [Required]
             [JsonPropertyName("user_id")]
@@ -61,7 +61,7 @@ namespace ApiSindisure.Domain.ViewModel.NotificationHistoryViewModel
             public string? NotificationType { get; set; }
 
             [JsonPropertyName("viewed_at")]
-            public string? ViewedAt { get; set; }
+            public DateTime ViewedAt { get; set; }
 
             [Required]
             [JsonPropertyName("created_at")]

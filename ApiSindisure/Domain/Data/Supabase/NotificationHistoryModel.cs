@@ -1,4 +1,4 @@
-[Supabase.Postgrest.Attributes.Table("message_support_history")]
+[Supabase.Postgrest.Attributes.Table("notification_history")]
 public class NotificationHistoryModel : Supabase.Postgrest.Models.BaseModel
 {
     [Supabase.Postgrest.Attributes.PrimaryKey("id")]
@@ -11,7 +11,7 @@ public class NotificationHistoryModel : Supabase.Postgrest.Models.BaseModel
     public string? NotificationType { get; set; }
 
     [Supabase.Postgrest.Attributes.Column("viewed_at")]
-    public string? ViewedAt { get; set; }
+    public DateTime ViewedAt { get; set; }
 
     [Supabase.Postgrest.Attributes.Column("user_id")]
     public string? UserId { get; set; }

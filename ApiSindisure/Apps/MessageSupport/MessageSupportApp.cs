@@ -31,7 +31,7 @@ namespace ApiSindisure.Apps.MessageSupport
                 var result = await client
                     .From<MessageSupportModel>()
                     .Select("*")
-                    .Filter("created_by", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
                     .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
                     .Get();
 

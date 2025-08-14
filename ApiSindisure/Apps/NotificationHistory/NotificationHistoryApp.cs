@@ -31,8 +31,7 @@ namespace ApiSindisure.Apps.NotificationHistory
                 var result = await client
                     .From<NotificationHistoryModel>()
                     .Select("*")
-                    .Filter("created_by", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
-                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)                    
                     .Get();
 
                 return result.Models.Select(model => new NotificationHistoryViewModel.Response
@@ -61,7 +60,7 @@ namespace ApiSindisure.Apps.NotificationHistory
                     Id = Guid.NewGuid().ToString(),
                     NotificationKey = request.NotificationKey,
                     NotificationType = request.NotificationType,                 
-                    ViewedAt = request.ViewedAt,
+                    ViewedAt = DateTime.UtcNow,
                     CreatedAt = DateTime.UtcNow,
                     UserId = request.UserId
                 };

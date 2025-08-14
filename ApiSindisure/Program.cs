@@ -31,6 +31,10 @@ using ApiSindisure.Apps.EmailReportsHistory;
 using ApiSindisure.Domain.Interfaces.Apps.EmailReportsApp;
 using ApiSindisure.Apps.EmailReportsApp;
 using Resend;
+using ApiSindisure.Domain.Interfaces.Apps.NotificationHistory;
+using ApiSindisure.Apps.NotificationHistory;
+using ApiSindisure.Domain.Interfaces.Apps.MessageSupport;
+using ApiSindisure.Apps.MessageSupport;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +55,8 @@ builder.Services.AddSingleton<IUserPermissionsApp, UserPermissionsApp>();
 builder.Services.AddSingleton<IUserPlansApp, UserPlansApp>();
 builder.Services.AddSingleton<IEmailAutomationApp, EmailAutomationApp>();
 builder.Services.AddSingleton<IEmailReportsHistoryApp, EmailReportsHistoryApp>();
+builder.Services.AddSingleton<INotificationHistoryApp, NotificationHistoryApp>();
+builder.Services.AddSingleton<IMessageSupportApp, MessageSupportApp>();
 builder.Services.AddScoped<IEmailReportsApp, EmailReportsApp>();
 
 
