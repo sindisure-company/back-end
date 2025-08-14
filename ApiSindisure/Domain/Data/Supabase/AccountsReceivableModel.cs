@@ -23,6 +23,9 @@
         [Supabase.Postgrest.Attributes.Column("category")]
         public string Category { get; set; }
 
+        [Supabase.Postgrest.Attributes.Column("payer")]
+        public string Payer { get; set; }
+
         [Supabase.Postgrest.Attributes.Column("notes")]
         public string? Notes { get; set; }
 
