@@ -6,11 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 namespace ApiSindisure.Controllers.V1
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
-    [Authorize]
+    [Route("api/v1/[controller]")]    
     public class AuditController : ControllerBase
     {
-        [HttpPost("log")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> LogAudit(
@@ -29,6 +28,7 @@ namespace ApiSindisure.Controllers.V1
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType<List<AuditViewModel.Response>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAuditLogs(

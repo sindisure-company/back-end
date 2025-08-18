@@ -69,6 +69,7 @@ builder.Services.AddSingleton<IEmailReportsHistoryApp, EmailReportsHistoryApp>()
 builder.Services.AddSingleton<INotificationHistoryApp, NotificationHistoryApp>();
 builder.Services.AddSingleton<IMessageSupportApp, MessageSupportApp>();
 builder.Services.AddSingleton<IMessageSupportHistoryApp, MessageSupportHistoryApp>();
+builder.Services.AddSingleton<IAuditApp, AuditApp>();
 
 builder.Services.AddScoped<IEmailReportsApp, EmailReportsApp>();
 

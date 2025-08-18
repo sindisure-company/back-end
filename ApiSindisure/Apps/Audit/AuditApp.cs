@@ -1,7 +1,8 @@
 using ApiSindisure.Domain.Interfaces.Apps.Audit;
 using ApiSindisure.Domain.ViewModel.Audit;
 using ApiSindisure.Services.Supabase;
-using System.Text.Json;
+using Newtonsoft.Json;
+
 
 namespace ApiSindisure.Apps.Audit
 {
@@ -14,29 +15,45 @@ namespace ApiSindisure.Apps.Audit
             _supabaseService = supabaseService;
         }
 
-        public async Task LogAuditAsync(AuditViewModel.LogRequest request, CancellationToken cancellationToken)
+        public async Task<AuditViewModel.Response> LogAuditAsync(AuditViewModel.LogRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                string jwt = string.Empty;
-                var client = _supabaseService.GetClient();
-                
-                // Usar RPC para chamar a função log_general_audit
-                var parameters = new Dictionary<string, object>
-                {
-                    { "p_user_id", request.UserId },
-                    { "p_contexto_audit", request.ContextoAudit },
-                    { "p_general_informations", request.GeneralInformations },
-                    { "p_ip_address", request.IpAddress },
-                    { "p_user_agent", request.UserAgent },
-                    { "p_session_id", request.SessionId }
-                };
+               var client = _supabaseService.GetClient();
 
-                await client.Rpc("log_general_audit", parameters);
+               var model = new AuditLogModel
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        UserId = request.UserId,
+                        ContextoAudit = request.ContextoAudit,
+                        GeneralInformations = JsonConvert.SerializeObject(request.GeneralInformations),
+                        IpAddress = request.IpAddress,
+                        UserAgent = request.UserAgent,
+                        SessionId = request.SessionId,                     
+                        CreatedAt = DateTime.UtcNow                   
+                    };
+
+                    var result = await client
+                        .From<AuditLogModel>()
+                        .Insert(model);
+
+                    var createdModel = result.Models.First();
+
+                return new AuditViewModel.Response
+                {
+                        Id = createdModel.Id,
+                        UserId = createdModel.UserId,
+                        ContextoAudit = createdModel.ContextoAudit,
+                        GeneralInformations = createdModel.GeneralInformations,
+                        IpAddress = createdModel.IpAddress,
+                        UserAgent = createdModel.UserAgent,
+                        SessionId = createdModel.SessionId,                     
+                        CreatedAt = createdModel.CreatedAt
+                };
             }
             catch (Exception ex)
             {
-                throw new Exception("Erro ao registrar auditoria", ex);
+                throw new Exception("Erro ao criar conta a pagar", ex);
             }
         }
 
@@ -89,35 +106,6 @@ namespace ApiSindisure.Apps.Audit
                 throw new Exception("Erro ao buscar logs de auditoria", ex);
             }
         }
-    }
-
-    // Modelo para mapeamento com Supabase
-    [Supabase.Postgrest.Attributes.Table("audit_logs")]
-    public class AuditLogModel : Supabase.Postgrest.Models.BaseModel
-    {
-        [Supabase.Postgrest.Attributes.PrimaryKey("id")]
-        public string Id { get; set; }
-
-        [Supabase.Postgrest.Attributes.Column("user_id")]
-        public string? UserId { get; set; }
-
-        [Supabase.Postgrest.Attributes.Column("contexto_audit")]
-        public string ContextoAudit { get; set; }
-
-        [Supabase.Postgrest.Attributes.Column("general_informations")]
-        public object GeneralInformations { get; set; }
-
-        [Supabase.Postgrest.Attributes.Column("ip_address")]
-        public string? IpAddress { get; set; }
-
-        [Supabase.Postgrest.Attributes.Column("user_agent")]
-        public string? UserAgent { get; set; }
-
-        [Supabase.Postgrest.Attributes.Column("session_id")]
-        public string? SessionId { get; set; }
-
-        [Supabase.Postgrest.Attributes.Column("created_at")]
-        public DateTime CreatedAt { get; set; }
-    }
+    }    
 }
 
