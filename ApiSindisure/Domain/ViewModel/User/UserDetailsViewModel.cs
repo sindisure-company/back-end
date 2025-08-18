@@ -125,10 +125,6 @@ namespace ApiSindisure.Domain.ViewModel.UserDetailsViewModel
             [Required]
             [JsonPropertyName("state")]
             public string? State { get; set; }
-
-            [Required]
-            [JsonPropertyName("category")]
-            public string? UpdatedAt { get; set; }
            
         }
 
@@ -194,11 +190,11 @@ namespace ApiSindisure.Domain.ViewModel.UserDetailsViewModel
             public string? State { get; set; }
 
             [Required]
-            [JsonPropertyName("category")]
+            [JsonPropertyName("updated_at")]
             public DateTime UpdatedAt { get; set; }
 
             [Required]
-            [JsonPropertyName("category")]
+            [JsonPropertyName("created_at")]
             public DateTime CreatedAt { get; set; }
             
         }

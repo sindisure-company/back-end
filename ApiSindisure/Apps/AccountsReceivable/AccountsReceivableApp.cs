@@ -47,8 +47,8 @@ namespace ApiSindisure.Apps.AccountsReceivable
                     CondominiumId = model.CondominiumId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
-                    CreatedAt = model.CreatedAt.ToString("yyyy/MM/dd"),
-                    UpdatedAt = model.UpdatedAt.ToString("yyyy/MM/dd")
+                    CreatedAt = model.CreatedAt,
+                    UpdatedAt = model.UpdatedAt
                 }).ToList();
             }
             catch (Exception ex)
@@ -99,8 +99,8 @@ namespace ApiSindisure.Apps.AccountsReceivable
                     CondominiumId = createdModel.CondominiumId,
                     FileName = createdModel.FileName,
                     FileUrl = createdModel.FileUrl,
-                    CreatedAt = createdModel.CreatedAt.ToString("yyyy/MM/dd"),
-                    UpdatedAt = createdModel.UpdatedAt.ToString("yyyy/MM/dd")
+                    CreatedAt = createdModel.CreatedAt,
+                    UpdatedAt = createdModel.UpdatedAt
                 };
             }
             catch (Exception ex)
@@ -155,8 +155,8 @@ namespace ApiSindisure.Apps.AccountsReceivable
                         CondominiumId = createdModel.CondominiumId,
                         FileName = createdModel.FileName,
                         FileUrl = createdModel.FileUrl,
-                        CreatedAt = createdModel.CreatedAt.ToString("yyyy/MM/dd"),
-                        UpdatedAt = createdModel.UpdatedAt.ToString("yyyy/MM/dd")
+                        CreatedAt = createdModel.CreatedAt,
+                        UpdatedAt = createdModel.UpdatedAt
                     });
                 }
 
@@ -223,8 +223,8 @@ namespace ApiSindisure.Apps.AccountsReceivable
                     CondominiumId = updatedModel.CondominiumId,
                     FileName = updatedModel.FileName,
                     FileUrl = updatedModel.FileUrl,
-                    CreatedAt = updatedModel.CreatedAt.ToString("yyyy/MM/dd"),
-                    UpdatedAt = updatedModel.UpdatedAt.ToString("yyyy/MM/dd")
+                    CreatedAt = updatedModel.CreatedAt,
+                    UpdatedAt = updatedModel.UpdatedAt
                 };
             }
             catch (Exception ex)
@@ -290,8 +290,8 @@ namespace ApiSindisure.Apps.AccountsReceivable
                         CondominiumId = updated.CondominiumId,
                         FileName = updated.FileName,
                         FileUrl = updated.FileUrl,
-                        CreatedAt = updated.CreatedAt.ToString("yyyy/MM/dd"),
-                        UpdatedAt = updated.UpdatedAt.ToString("yyyy/MM/dd")
+                        CreatedAt = updated.CreatedAt,
+                        UpdatedAt = updated.UpdatedAt
                     });
                 }
 

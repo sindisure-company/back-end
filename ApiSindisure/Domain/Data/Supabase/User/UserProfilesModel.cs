@@ -1,4 +1,4 @@
-[Supabase.Postgrest.Attributes.Table("user_plans_history")]
+[Supabase.Postgrest.Attributes.Table("user_profiles")]
 public class UserProfilesModel : Supabase.Postgrest.Models.BaseModel
 {
     [Supabase.Postgrest.Attributes.PrimaryKey("id")]

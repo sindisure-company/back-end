@@ -16,7 +16,7 @@ namespace ApiSindisure.Apps.UserDetails
             _supabaseService = supabaseService;
         }
 
-        public async Task<List<UserDetailsViewModel.Response>> GetUserDetailsAsync(UserDetailsViewModel.GetRequest request, CancellationToken cancellationToken)
+        public async Task<UserDetailsViewModel.Response> GetUserDetailsAsync(UserDetailsViewModel.GetRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -31,14 +31,16 @@ namespace ApiSindisure.Apps.UserDetails
                 var result = await client
                     .From<UserDetailsModel>()
                     .Select("*")
-                    .Filter("created_by", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Filter("auth_user_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id.Trim())
                     .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
                     .Get();
 
-                return result.Models.Select(model => new UserDetailsViewModel.Response
+                var model = result.Models.FirstOrDefault();
+
+                return new UserDetailsViewModel.Response
                 {
                     Id = model.Id,
-                    AuthUserId  = model.AuthUserId ,
+                    AuthUserId = model.AuthUserId,
                     Email = model.Email,
                     Address = model.Address,
                     AvatarUrl = model.AvatarUrl,
@@ -55,8 +57,8 @@ namespace ApiSindisure.Apps.UserDetails
                     State = model.State,
                     CreatedAt = model.CreatedAt,
                     UpdatedAt = model.UpdatedAt,
-                    
-                }).ToList();
+
+                };
             }
             catch (Exception ex)
             {
@@ -130,26 +132,38 @@ namespace ApiSindisure.Apps.UserDetails
             try
             {
                 var client = _supabaseService.GetClient();
+
+                var resultGet = await client
+                    .From<UserDetailsModel>()
+                    .Select("*")
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+                
+                    var retornoGet = resultGet.Models.FirstOrDefault();
+
+
                 var model = new UserDetailsModel
-                {
-                    Id = request.Id,
-                    AuthUserId = request.AuthUserId,
-                    Email = request.Email,
-                    Address = request.Address,
-                    AvatarUrl = request.AvatarUrl,
-                    City = request.City,
-                    DocumentNumber = request.DocumentNumber,
-                    FileName = request.FileName,
-                    FileUrl = request.FileUrl,
-                    FirstName = request.FirstName,
-                    ImgAvatar = request.ImgAvatar,
-                    LastName = request.LastName,
-                    Neighborhood = request.Neighborhood,
-                    Number = request.Number,
-                    Phone = request.Phone,
-                    State = request.State,
-                    UpdatedAt = DateTime.UtcNow,
-                };               
+                    {
+                        Id = request.Id,
+                        AuthUserId = request.AuthUserId,
+                        Email = request.Email,
+                        Address = request.Address,
+                        AvatarUrl = request.AvatarUrl,
+                        City = request.City,
+                        DocumentNumber = request.DocumentNumber,
+                        FileName = request.FileName,
+                        FileUrl = request.FileUrl,
+                        FirstName = request.FirstName,
+                        ImgAvatar = request.ImgAvatar,
+                        LastName = request.LastName,
+                        Neighborhood = request.Neighborhood,
+                        Number = request.Number,
+                        Phone = request.Phone,
+                        State = request.State,
+                        UpdatedAt = DateTime.UtcNow,
+                        CreatedAt = retornoGet.CreatedAt,
+                    };               
 
                 var result = await client
                     .From<UserDetailsModel>()

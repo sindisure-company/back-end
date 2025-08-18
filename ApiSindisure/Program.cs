@@ -35,6 +35,12 @@ using ApiSindisure.Domain.Interfaces.Apps.NotificationHistory;
 using ApiSindisure.Apps.NotificationHistory;
 using ApiSindisure.Domain.Interfaces.Apps.MessageSupport;
 using ApiSindisure.Apps.MessageSupport;
+using ApiSindisure.Domain.Interfaces.Apps.UserDetails;
+using ApiSindisure.Apps.UserDetails;
+using ApiSindisure.Apps.UserPlansHistory;
+using ApiSindisure.Domain.Interfaces.Apps.UserPlansHistory;
+using ApiSindisure.Domain.Interfaces.Apps.UserProfiles;
+using ApiSindisure.Apps.UserProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,10 +59,14 @@ builder.Services.AddSingleton<IAuditApp, AuditApp>();
 builder.Services.AddSingleton<ICompaniesRecurringApp, CompaniesRecurringApp>();
 builder.Services.AddSingleton<IUserPermissionsApp, UserPermissionsApp>();
 builder.Services.AddSingleton<IUserPlansApp, UserPlansApp>();
+builder.Services.AddSingleton<IUserPlansHistoryApp, UserPlansHistoryApp>();
+builder.Services.AddSingleton<IUserDetailsApp, UserDetailsApp>();
+builder.Services.AddSingleton<IUserProfilesApp, UserProfilesApp>();
 builder.Services.AddSingleton<IEmailAutomationApp, EmailAutomationApp>();
 builder.Services.AddSingleton<IEmailReportsHistoryApp, EmailReportsHistoryApp>();
 builder.Services.AddSingleton<INotificationHistoryApp, NotificationHistoryApp>();
 builder.Services.AddSingleton<IMessageSupportApp, MessageSupportApp>();
+
 builder.Services.AddScoped<IEmailReportsApp, EmailReportsApp>();
 
 

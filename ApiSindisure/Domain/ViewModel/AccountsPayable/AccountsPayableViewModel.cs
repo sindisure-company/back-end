@@ -160,10 +160,10 @@ namespace ApiSindisure.Domain.ViewModel.AccountsPayable
             public string? FileUrl { get; set; }
 
             [JsonPropertyName("created_at")]
-            public string? CreatedAt { get; set; }
+            public DateTime CreatedAt { get; set; }
 
             [JsonPropertyName("updated_by")]
-            public string? UpdatedAt { get; set; }
+            public DateTime UpdatedAt { get; set; }
         }
     }
 }

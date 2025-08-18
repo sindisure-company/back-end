@@ -49,8 +49,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CompaniesRecurringId = model.CompaniesRecurringId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
-                    CreatedAt = model.CreatedAt.ToString("yyyy/MM/dd"),
-                    UpdatedAt = model.UpdatedAt.ToString("yyyy/MM/dd")
+                    CreatedAt = model.CreatedAt,
+                    UpdatedAt = model.UpdatedAt
                 }).ToList();
             }
             catch (Exception ex)
@@ -94,8 +94,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CompaniesRecurringId = model.CompaniesRecurringId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
-                    CreatedAt = model.CreatedAt.ToString("yyyy/MM/dd"),
-                    UpdatedAt = model.UpdatedAt.ToString("yyyy/MM/dd")
+                    CreatedAt = model.CreatedAt,
+                    UpdatedAt = model.UpdatedAt
                 }).ToList();
             }
             catch (Exception ex)
@@ -141,8 +141,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CompaniesRecurringId = model.CompaniesRecurringId,
                     FileName = model.FileName,
                     FileUrl = model.FileUrl,
-                    CreatedAt = model.CreatedAt.ToString("yyyy/MM/dd"),
-                    UpdatedAt = model.UpdatedAt.ToString("yyyy/MM/dd")
+                    CreatedAt = model.CreatedAt,
+                    UpdatedAt = model.UpdatedAt
                 }).ToList();
             }
             catch (Exception ex)
@@ -195,8 +195,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CondominiumId = createdModel.CondominiumId,
                     FileName = createdModel.FileName,
                     FileUrl = createdModel.FileUrl,
-                    CreatedAt = createdModel.CreatedAt.ToString("yyyy/MM/dd"),
-                    UpdatedAt = createdModel.UpdatedAt.ToString("yyyy/MM/dd")
+                    CreatedAt = createdModel.CreatedAt,
+                    UpdatedAt = createdModel.UpdatedAt
                 };
             }
             catch (Exception ex)
@@ -252,8 +252,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                         CondominiumId = createdModel.CondominiumId,
                         FileName = createdModel.FileName,
                         FileUrl = createdModel.FileUrl,
-                        CreatedAt = createdModel.CreatedAt.ToString("yyyy/MM/dd"),
-                        UpdatedAt = createdModel.UpdatedAt.ToString("yyyy/MM/dd")
+                        CreatedAt = createdModel.CreatedAt,
+                        UpdatedAt = createdModel.UpdatedAt
                     });
                 }
 
@@ -322,8 +322,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CondominiumId = updatedModel.CondominiumId,
                     FileName = updatedModel.FileName,
                     FileUrl = updatedModel.FileUrl,
-                    CreatedAt = updatedModel.CreatedAt.ToString("yyyy/MM/dd"),
-                    UpdatedAt = updatedModel.UpdatedAt.ToString("yyyy/MM/dd")
+                    CreatedAt = updatedModel.CreatedAt,
+                    UpdatedAt = updatedModel.UpdatedAt
                 };
             }
             catch (Exception ex)
@@ -366,8 +366,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                     CompaniesRecurringId = updatedModel.CompaniesRecurringId,
                     FileName = updatedModel.FileName,
                     FileUrl = updatedModel.FileUrl,
-                    CreatedAt = updatedModel.CreatedAt.ToString("yyyy/MM/dd"),
-                    UpdatedAt = updatedModel.UpdatedAt.ToString("yyyy/MM/dd")
+                    CreatedAt = updatedModel.CreatedAt,
+                    UpdatedAt = updatedModel.UpdatedAt
                 };
             }
             catch (Exception ex)
@@ -437,8 +437,8 @@ namespace ApiSindisure.Apps.AccountsPayable
                         CompaniesRecurringId = updatedModel.CompaniesRecurringId,
                         FileName = updatedModel.FileName,
                         FileUrl = updatedModel.FileUrl,
-                        CreatedAt = updatedModel.CreatedAt.ToString("yyyy/MM/dd"),
-                        UpdatedAt = updatedModel.UpdatedAt.ToString("yyyy/MM/dd")
+                        CreatedAt = updatedModel.CreatedAt,
+                        UpdatedAt = updatedModel.UpdatedAt
                     };
 
                     listResult.Add(objAccountsPayable);
