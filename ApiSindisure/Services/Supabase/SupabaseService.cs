@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Routing;
+﻿using ApiSindisure.Domain.ViewModel.UserRegisterViewModel;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Supabase;
 using Supabase.Gotrue;
 using SupabaseClient = Supabase.Client;
@@ -36,10 +37,10 @@ namespace ApiSindisure.Services.Supabase
                 var session = await _client.Auth.SignIn(email, password);
                 return session;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                return null;
-            }            
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<User?> GetUser(string jwt)
@@ -55,15 +56,35 @@ namespace ApiSindisure.Services.Supabase
         public SupabaseClient GetClient()
         {
             try
-            {   
+            {
                 return _client;
-            
+
             }
             catch (Exception ex)
             {
                 throw new Exception("Erro ao obter cliente Supabase: " + ex.Message);
             }
-            
+
         }
+        
+        public async Task<User?> SignUp(UserRegisterViewModel.CreateRequest request,  Dictionary<string, object>? userMetadata = null)
+        {
+            try
+            {
+                var options = new SignUpOptions
+                {
+                    Data = userMetadata 
+                };
+
+                var session = await _client.Auth.SignUp(request.Login.Email, request.Login.Password, options);
+
+                return session.User;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao cadastrar usuário no Supabase: " + ex.Message, ex);
+            }
+        }
+
     }
 }

@@ -4,6 +4,7 @@ using ApiSindisure.Domain.Helpers;
 using ApiSindisure.Domain.Interfaces.Apps.Login;
 using ApiSindisure.Domain.Interfaces.Services.Jwt;
 using ApiSindisure.Domain.ViewModel.Login;
+using ApiSindisure.Domain.ViewModel.UserRegisterViewModel;
 using ApiSindisure.Services.Supabase;
 
 namespace ApiSindisure.Apps.Login
@@ -19,7 +20,7 @@ namespace ApiSindisure.Apps.Login
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
-       public async Task<LoginViewModel.Response> HandleAsync(LoginViewModel.Request request, CancellationToken cancellationToken)
+        public async Task<LoginViewModel.Response> HandleAsync(LoginViewModel.Request request, CancellationToken cancellationToken)
         {
             try
             {
@@ -47,29 +48,29 @@ namespace ApiSindisure.Apps.Login
                         LastSignInAt = user.LastSignInAt,
                         AppMetadata = new LoginViewModel.AppMetadata
                         {
-                            Provider  = user.AppMetadata?["provider"]?.ToString(),
-                            Providers = user.AppMetadata?["providers"] as List<string> 
+                            Provider = user.AppMetadata?["provider"]?.ToString(),
+                            Providers = user.AppMetadata?["providers"] as List<string>
                                 ?? new List<string>()
                         },
                         UserMetadata = new LoginViewModel.UserMetadata
                         {
-                            Address        = user.UserMetadata?["address"]?.ToString(),
-                            Cep            = user.UserMetadata?["cep"]?.ToString(),
-                            City           = user.UserMetadata?["city"]?.ToString(),
-                            DateOfBirth    = Convert.ToDateTime(user.UserMetadata?["date_of_birth"]?.ToString()),
+                            Address = user.UserMetadata?["address"]?.ToString(),
+                            Cep = user.UserMetadata?["cep"]?.ToString(),
+                            City = user.UserMetadata?["city"]?.ToString(),
+                            DateOfBirth = Convert.ToDateTime(user.UserMetadata?["date_of_birth"]?.ToString()),
                             DocumentNumber = user.UserMetadata?["document_number"]?.ToString(),
-                            Email          = user.UserMetadata?["email"]?.ToString(),
-                            EmailVerified  = user.UserMetadata?["email_verified"] != null && 
+                            Email = user.UserMetadata?["email"]?.ToString(),
+                            EmailVerified = user.UserMetadata?["email_verified"] != null &&
                                             bool.TryParse(user.UserMetadata["email_verified"].ToString(), out var ev) ? ev : false,
-                            FirstName      = user.UserMetadata?["first_name"]?.ToString(),
-                            LastName       = user.UserMetadata?["last_name"]?.ToString(),
-                            Neighborhood   = user.UserMetadata?["neighborhood"]?.ToString(),
-                            Number         = user.UserMetadata?["number"]?.ToString(),
-                            Phone          = user.UserMetadata?["phone"]?.ToString(),
-                            PhoneVerified  = user.UserMetadata?["phone_verified"] != null && 
+                            FirstName = user.UserMetadata?["first_name"]?.ToString(),
+                            LastName = user.UserMetadata?["last_name"]?.ToString(),
+                            Neighborhood = user.UserMetadata?["neighborhood"]?.ToString(),
+                            Number = user.UserMetadata?["number"]?.ToString(),
+                            Phone = user.UserMetadata?["phone"]?.ToString(),
+                            PhoneVerified = user.UserMetadata?["phone_verified"] != null &&
                                             bool.TryParse(user.UserMetadata["phone_verified"].ToString(), out var pv) ? pv : false,
-                            State          = user.UserMetadata?["state"]?.ToString(),
-                            Sub            = user.UserMetadata?["sub"]?.ToString(),
+                            State = user.UserMetadata?["state"]?.ToString(),
+                            Sub = user.UserMetadata?["sub"]?.ToString(),
 
                         },
                         Identities = user.Identities?.Select(i => new LoginViewModel.Identity
@@ -79,23 +80,23 @@ namespace ApiSindisure.Apps.Login
                             UserId = i.UserId,
                             IdentityData = new LoginViewModel.UserMetadata
                             {
-                               Address        = i.IdentityData?["address"]?.ToString(),
-                                Cep            = i.IdentityData?["cep"]?.ToString(),
-                                City           = i.IdentityData?["city"]?.ToString(),
-                                DateOfBirth    = Convert.ToDateTime(i.IdentityData?["date_of_birth"]?.ToString()),
+                                Address = i.IdentityData?["address"]?.ToString(),
+                                Cep = i.IdentityData?["cep"]?.ToString(),
+                                City = i.IdentityData?["city"]?.ToString(),
+                                DateOfBirth = Convert.ToDateTime(i.IdentityData?["date_of_birth"]?.ToString()),
                                 DocumentNumber = i.IdentityData?["document_number"]?.ToString(),
-                                Email          = i.IdentityData?["email"]?.ToString(),
-                                EmailVerified  = i.IdentityData?["email_verified"] != null &&
+                                Email = i.IdentityData?["email"]?.ToString(),
+                                EmailVerified = i.IdentityData?["email_verified"] != null &&
                                                 bool.TryParse(i.IdentityData["email_verified"].ToString(), out var iev) ? iev : false,
-                                FirstName      = i.IdentityData?["first_name"]?.ToString(),
-                                LastName       = i.IdentityData?["last_name"]?.ToString(),
-                                Neighborhood   = i.IdentityData?["neighborhood"]?.ToString(),
-                                Number         = i.IdentityData?["number"]?.ToString(),
-                                Phone          = i.IdentityData?["phone"]?.ToString(),
-                                PhoneVerified  = i.IdentityData?["phone_verified"] != null &&
+                                FirstName = i.IdentityData?["first_name"]?.ToString(),
+                                LastName = i.IdentityData?["last_name"]?.ToString(),
+                                Neighborhood = i.IdentityData?["neighborhood"]?.ToString(),
+                                Number = i.IdentityData?["number"]?.ToString(),
+                                Phone = i.IdentityData?["phone"]?.ToString(),
+                                PhoneVerified = i.IdentityData?["phone_verified"] != null &&
                                                 bool.TryParse(i.IdentityData["phone_verified"].ToString(), out var ipv) ? ipv : false,
-                                State          = i.IdentityData?["state"]?.ToString(),
-                                Sub            = i.IdentityData?["sub"]?.ToString(),
+                                State = i.IdentityData?["state"]?.ToString(),
+                                Sub = i.IdentityData?["sub"]?.ToString(),
 
                             },
                             Provider = i.Provider,
@@ -120,5 +121,50 @@ namespace ApiSindisure.Apps.Login
                 };
             }
         }
+
+        public async Task<UserRegisterViewModel.Response> SignUp(UserRegisterViewModel.CreateRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var resultDictionary = ToDictionary(request);
+
+                if (resultDictionary is null)
+                    throw new ArgumentException("Erro ao converter para dictionary");                
+
+                var response = await _supabaseService.SignUp(request, resultDictionary);
+
+                if (response is null)
+                    throw new ArgumentException("Erro ao retornar response");  
+
+                return new UserRegisterViewModel.Response
+                {
+                    Id = response.Id,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }            
+        }
+
+        private Dictionary<string, object> ToDictionary(UserRegisterViewModel.CreateRequest request)
+        {
+            return new Dictionary<string, object>
+            {
+                { "date_of_birth", request.DateOfBirth ?? string.Empty },
+                { "document_number", request.DocumentNumber ?? string.Empty },
+                { "first_name", request.FirstName ?? string.Empty },
+                { "last_name", request.LastName ?? string.Empty },
+                { "address", request.Address ?? string.Empty },
+                { "neighborhood", request.Neighborhood ?? string.Empty },
+                { "number", request.Number ?? string.Empty },
+                { "cep", request.Cep ?? string.Empty },
+                { "complement", request.Complement ?? string.Empty },
+                { "phone", request.Phone ?? string.Empty },
+                { "city", request.City ?? string.Empty },
+                { "state", request.State ?? string.Empty }
+            };
+        }
+        
     }
 }

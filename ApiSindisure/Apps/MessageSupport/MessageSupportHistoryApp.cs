@@ -31,7 +31,42 @@ namespace ApiSindisure.Apps.MessageSupportHistory
                 var result = await client
                     .From<MessageSupportHistoryModel>()
                     .Select("*")
-                    .Filter("created_by", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                return result.Models.Select(model => new MessageSupportHistoryViewModel.Response
+                {
+                    Id = model.Id,
+                    Message = model.Message,
+                    IsAdminResponse = model.IsAdminResponse,                 
+                    SupportMessageId = model.SupportMessageId,
+                    UserId = model.UserId,
+                    CreatedAt = model.CreatedAt
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
+
+        public async Task<List<MessageSupportHistoryViewModel.Response>> GetMessageUniqueSupportHistoryAsync(MessageSupportHistoryViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("MessageSupportHistoryId não pode ser nulo ou vazio.");
+
+                 if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("MessageSupportHistoryId inválido. Deve ser um UUID.");
+                    
+                var client = _supabaseService.GetClient();               
+
+                var result = await client
+                    .From<MessageSupportHistoryModel>()
+                    .Select("*")
+                    .Filter("support_message_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
                     .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
                     .Get();
 
@@ -54,13 +89,13 @@ namespace ApiSindisure.Apps.MessageSupportHistory
         public async Task<MessageSupportHistoryViewModel.Response> CreateMessageSupportHistoryAsync(MessageSupportHistoryViewModel.CreateRequest request, CancellationToken cancellationToken)
         {
             try
-            {                
+            {
                 var client = _supabaseService.GetClient();
                 var model = new MessageSupportHistoryModel
                 {
                     Id = Guid.NewGuid().ToString(),
                     Message = request.Message,
-                    IsAdminResponse = request.IsAdminResponse,                 
+                    IsAdminResponse = request.IsAdminResponse,
                     SupportMessageId = request.SupportMessageId,
                     CreatedAt = DateTime.UtcNow,
                     UserId = request.UserId

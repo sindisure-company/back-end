@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 namespace ApiSindisure.Controllers.V1
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
-    [Authorize]
+    [Route("api/v1/[controller]")]    
     public class UserPlansController : ControllerBase
     {
         [HttpGet]
+        [Authorize]
         [ProducesResponseType<List<UserPlansViewModel.Response>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUserPlans(            
@@ -37,6 +37,7 @@ namespace ApiSindisure.Controllers.V1
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType<List<UserPlansViewModel.Response>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetUniqueUserPlans(  
@@ -74,6 +75,7 @@ namespace ApiSindisure.Controllers.V1
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         [ProducesResponseType<UserPlansViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateUserPlans(
@@ -94,6 +96,7 @@ namespace ApiSindisure.Controllers.V1
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteUserPlans(

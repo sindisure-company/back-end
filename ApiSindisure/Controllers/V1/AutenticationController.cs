@@ -1,5 +1,6 @@
 ﻿using ApiSindisure.Domain.Interfaces.Apps.Login;
 using ApiSindisure.Domain.ViewModel.Login;
+using ApiSindisure.Domain.ViewModel.UserRegisterViewModel;
 using ApiSindisure.Filters.Login;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,8 +23,21 @@ namespace ApiSindisure.Controllers.V1
         public async Task<IActionResult> Login(
             [FromBody] LoginViewModel.Request loginRequest,
             [FromServices] ILoginApp app)
-        {            
+        {
             var resposta = await app.HandleAsync(loginRequest, CancellationToken.None);
+            return Ok(resposta);
+        }
+
+        [HttpPost("SignUp")]
+        [ProducesResponseType<UserRegisterViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [TypeFilter<LoginHeadersFilter>]
+        public async Task<IActionResult> SignUp(
+            [FromBody] UserRegisterViewModel.CreateRequest request,
+            [FromServices] ILoginApp app)
+        {            
+            var resposta = await app.SignUp(request, CancellationToken.None);
             return Ok(resposta);
         }
     }

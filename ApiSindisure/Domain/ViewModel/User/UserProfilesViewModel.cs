@@ -127,7 +127,7 @@ namespace ApiSindisure.Domain.ViewModel.UserProfilesViewModel
 
             [Required]
             [JsonPropertyName("avatar_url")]
-            public string? AvatarUrl { get; set; }
+            public string? AvatarUrl{ get; set; }
 
             [Required]
             [JsonPropertyName("city")]
