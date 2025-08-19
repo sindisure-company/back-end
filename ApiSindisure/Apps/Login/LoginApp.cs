@@ -147,11 +147,25 @@ namespace ApiSindisure.Apps.Login
             }            
         }
 
-        public async Task<LoginViewModel.Response> ResetPasswordAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
+        public async Task<LoginViewModel.Response> SendLinkResetPasswordAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
         {
             try
             {
-                var response = await _supabaseService.ResetPasswordForEmailAsync(request, cancellationToken);
+                var response = await _supabaseService.SendLinkResetPasswordForEmailAsync(request, cancellationToken);
+
+                return new LoginViewModel.Response { };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao enviar link do reset de senha: " + ex.Message);
+            }
+        }  
+
+        public async Task<LoginViewModel.Response> UpdateUserPasswordAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var response = await _supabaseService.UpdateUserPassword(request, cancellationToken);
 
                 return new LoginViewModel.Response { };
             }
@@ -159,7 +173,7 @@ namespace ApiSindisure.Apps.Login
             {
                 throw new Exception("Ocorreu um erro ao resetar a senha: " + ex.Message);
             }
-        }    
+        }      
 
         private Dictionary<string, object> ToDictionary(UserRegisterViewModel.CreateRequest request)
         {

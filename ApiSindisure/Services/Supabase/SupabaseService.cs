@@ -5,6 +5,7 @@ using SupabaseClient = Supabase.Client;
 using Newtonsoft.Json;
 using System.Text;
 using ApiSindisure.Domain.ViewModel.Login;
+using System.Net.Http.Headers;
 
 
 namespace ApiSindisure.Services.Supabase
@@ -89,8 +90,8 @@ namespace ApiSindisure.Services.Supabase
                 throw new Exception("Erro ao cadastrar usuário no Supabase: " + ex.Message, ex);
             }
         }
-        
-         public async Task<bool> ResetPasswordForEmailAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
+
+        public async Task<bool> SendLinkResetPasswordForEmailAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
         {
             try
             {
@@ -101,18 +102,38 @@ namespace ApiSindisure.Services.Supabase
                 };
 
                 var requestApi = new HttpRequestMessage(HttpMethod.Post, $"{_url}/auth/v1/recover");
-                requestApi.Headers.Add("apikey", _anonKey);             
+                requestApi.Headers.Add("apikey", _anonKey);
                 requestApi.Content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
 
                 var response = await _httpClient.SendAsync(requestApi, cancellationToken);
 
-            return response.IsSuccessStatusCode;
+                return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
                 throw new Exception("Erro ao resetar senha no Supabase: " + ex.Message, ex);
             }
+
+        }
+
+        public async Task<bool> UpdateUserPassword(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
+        {
+            var requestUrl = $"{_url}/auth/v1/user";
+
+            var body = new
+            {
+                password = request.NewPassword
+            };
+
+            var jsonBody = JsonConvert.SerializeObject(body);
+            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
             
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
+            _httpClient.DefaultRequestHeaders.Add("apikey", _anonKey);
+
+            var response = await _httpClient.PutAsync(requestUrl, content);
+
+            return response.IsSuccessStatusCode;
         }
 
     }

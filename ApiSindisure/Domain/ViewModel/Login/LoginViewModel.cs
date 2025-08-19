@@ -15,13 +15,17 @@ namespace ApiSindisure.Domain.ViewModel.Login
 
         public class ResetPassword
         {
-            [Required]
             [JsonPropertyName("email")]
             public string? Email { get; set; }
 
-            [Required]
             [JsonPropertyName("redirect_to")]
-            public string? RedirectTo { get; set; }         
+            public string? RedirectTo { get; set; }
+
+            [JsonPropertyName("access_token")]
+            public string? AccessToken { get; set; }
+
+            [JsonPropertyName("new_password")]
+            public string? NewPassword { get; set; }     
         }
 
 

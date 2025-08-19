@@ -41,6 +41,26 @@ namespace ApiSindisure.Controllers.V1
             return Ok(resposta);
         }
 
+        [HttpPost("SendLinkResetPassword")]
+        [ProducesResponseType<UserRegisterViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [TypeFilter<LoginHeadersFilter>]
+        public async Task<IActionResult> SendLinkResetPassword(
+            [FromBody] LoginViewModel.ResetPassword request,
+            [FromServices] ILoginApp app)
+        {
+            try
+            {
+                await app.SendLinkResetPasswordAsync(request, CancellationToken.None);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao enviar linka para resetar a senha: " + ex.Message);
+            }
+        }
+
         [HttpPost("ResetPassword")]
         [ProducesResponseType<UserRegisterViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -52,7 +72,7 @@ namespace ApiSindisure.Controllers.V1
         {
             try
             {
-                await app.ResetPasswordAsync(request, CancellationToken.None);
+                await app.UpdateUserPasswordAsync(request, CancellationToken.None);
                 return Ok();
             }
             catch (Exception ex)
