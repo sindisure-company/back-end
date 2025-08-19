@@ -13,11 +13,11 @@ namespace ApiSindisure.Domain.ViewModel.Audit
 
             [Required]
             [JsonPropertyName("contexto_audit")]
-            public string ContextoAudit { get; set; }
+            public string? ContextoAudit { get; set; }
 
             [Required]
             [JsonPropertyName("general_informations")]
-            public Dictionary<string, object> GeneralInformations { get; set; }
+            public object? GeneralInformations { get; set; }
 
             [JsonPropertyName("ip_address")]
             public string? IpAddress { get; set; }
