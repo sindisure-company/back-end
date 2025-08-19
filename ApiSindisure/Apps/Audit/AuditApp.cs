@@ -2,7 +2,7 @@ using ApiSindisure.Domain.Interfaces.Apps.Audit;
 using ApiSindisure.Domain.ViewModel.Audit;
 using ApiSindisure.Services.Supabase;
 using Newtonsoft.Json;
-
+using System.Text.Json;
 
 namespace ApiSindisure.Apps.Audit
 {
@@ -26,7 +26,10 @@ namespace ApiSindisure.Apps.Audit
                         Id = Guid.NewGuid().ToString(),
                         UserId = request.UserId,
                         ContextoAudit = request.ContextoAudit,
-                        GeneralInformations = JsonConvert.SerializeObject(request.GeneralInformations),
+                        GeneralInformations = request.GeneralInformations is JsonElement element
+                            ? element.GetRawText() 
+                            : JsonConvert.SerializeObject(request.GeneralInformations),
+
                         IpAddress = request.IpAddress,
                         UserAgent = request.UserAgent,
                         SessionId = request.SessionId,                     
