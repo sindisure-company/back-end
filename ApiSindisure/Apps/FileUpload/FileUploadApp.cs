@@ -65,9 +65,12 @@ namespace ApiSindisure.Apps.FileUpload
 
             var fileBytes = await bucket.Download(relativeFilePath, (EventHandler<float>?)null);
 
+            var base64String = Convert.ToBase64String(fileBytes);
+
             return new FileUploadViewModel.Response
             {
-                FileResponse = fileBytes
+                FileResponse = base64String,
+                FileName = relativeFilePath
             };
         }    
     }

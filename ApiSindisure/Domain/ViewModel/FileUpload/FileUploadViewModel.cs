@@ -33,7 +33,7 @@ namespace ApiSindisure.Domain.ViewModel.FileUpload
         public class Response
         {
             [Required]
-            public byte[] FileResponse { get; set; }
+            public string? FileResponse { get; set; }
 
             [Required]
             public string? FileName { get; set; }

@@ -32,11 +32,12 @@ namespace ApiSindisure.Controllers.V1
         [ProducesResponseType<List<FileUploadViewModel.Response>>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DownloadFileUpload(
-            [FromBody] FileUploadViewModel.Download request,
+            [FromQuery] string filePath,
             [FromServices] IFileUploadApp app)
         {
             try
             {
+                var request = new FileUploadViewModel.Download { FilePath = filePath };
                 var response = await app.DownloadFileAsync(request, CancellationToken.None);
                 return Ok(response);
             }
