@@ -2,6 +2,9 @@
 using Supabase;
 using Supabase.Gotrue;
 using SupabaseClient = Supabase.Client;
+using Newtonsoft.Json;
+using System.Text;
+using ApiSindisure.Domain.ViewModel.Login;
 
 
 namespace ApiSindisure.Services.Supabase
@@ -11,11 +14,13 @@ namespace ApiSindisure.Services.Supabase
         private readonly SupabaseClient _client;
         private readonly string _url;
         private readonly string _anonKey;
+        private readonly HttpClient _httpClient;
 
-        public SupabaseService(IConfiguration configuration)
+        public SupabaseService(IConfiguration configuration, HttpClient httpClient)
         {
             _url = configuration["Supabase:Url"];
             _anonKey = configuration["Supabase:AnonKey"];
+            _httpClient = httpClient;
 
             var options = new SupabaseOptions
             {
@@ -65,14 +70,14 @@ namespace ApiSindisure.Services.Supabase
             }
 
         }
-        
-        public async Task<User?> SignUp(UserRegisterViewModel.CreateRequest request,  Dictionary<string, object>? userMetadata = null)
+
+        public async Task<User?> SignUp(UserRegisterViewModel.CreateRequest request, Dictionary<string, object>? userMetadata = null)
         {
             try
             {
                 var options = new SignUpOptions
                 {
-                    Data = userMetadata 
+                    Data = userMetadata
                 };
 
                 var session = await _client.Auth.SignUp(request.Login.Email, request.Login.Password, options);
@@ -83,6 +88,31 @@ namespace ApiSindisure.Services.Supabase
             {
                 throw new Exception("Erro ao cadastrar usuário no Supabase: " + ex.Message, ex);
             }
+        }
+        
+         public async Task<bool> ResetPasswordForEmailAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var requestBody = new
+                {
+                    email = request.Email,
+                    redirect_to = request.RedirectTo
+                };
+
+                var requestApi = new HttpRequestMessage(HttpMethod.Post, $"{_url}/auth/v1/recover");
+                requestApi.Headers.Add("apikey", _anonKey);             
+                requestApi.Content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(requestApi, cancellationToken);
+
+            return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao resetar senha no Supabase: " + ex.Message, ex);
+            }
+            
         }
 
     }

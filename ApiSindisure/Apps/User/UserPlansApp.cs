@@ -141,20 +141,31 @@ namespace ApiSindisure.Apps.UserPlans
             try
             {
                 var client = _supabaseService.GetClient();
+
+                var resultGet = await client
+                    .From<UserPlansModel>()
+                    .Select("*")
+                    .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+                
+                var retornoGet = resultGet.Models.FirstOrDefault();
+
                 var model = new UserPlansModel
                 {
-                    Id = request.Id,
+                    Id = retornoGet.Id,
                     PaymentDate = request.PaymentDate,
                     PlanName = request.PlanName,
                     PlanValue = request.PlanValue,
                     Status = request.Status,
                     UpdatedAt = DateTime.UtcNow,
-                    UserId = request.UserId
+                    UserId = request.UserId,
+                    CreatedAt = retornoGet.CreatedAt
                 };               
 
                 var result = await client
                     .From<UserPlansModel>()
-                    .Where(x => x.Id == request.Id)
+                    .Where(x => x.Id == retornoGet.Id)
                     .Update(model);
 
                 var updatedModel = result.Models.First();

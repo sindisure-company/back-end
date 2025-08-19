@@ -56,10 +56,6 @@ namespace ApiSindisure.Domain.ViewModel.UserPlansViewModel
             [Required]
             [JsonPropertyName("user_id")]
             public string? UserId { get; set; }
-
-            [Required]
-            [JsonPropertyName("updated_at")]
-            public string? UpdatedAt { get; set; }
         }
 
         public class DeleteRequest : BaseEntity

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace ApiSindisure.Domain.ViewModel.Login
@@ -10,6 +11,17 @@ namespace ApiSindisure.Domain.ViewModel.Login
         {           
             public string? Email { get; set; }       
             public string? Password { get; set; }
+        }
+
+        public class ResetPassword
+        {
+            [Required]
+            [JsonPropertyName("email")]
+            public string? Email { get; set; }
+
+            [Required]
+            [JsonPropertyName("redirect_to")]
+            public string? RedirectTo { get; set; }         
         }
 
 

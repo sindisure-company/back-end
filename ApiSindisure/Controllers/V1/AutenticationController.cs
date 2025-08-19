@@ -36,9 +36,29 @@ namespace ApiSindisure.Controllers.V1
         public async Task<IActionResult> SignUp(
             [FromBody] UserRegisterViewModel.CreateRequest request,
             [FromServices] ILoginApp app)
-        {            
+        {
             var resposta = await app.SignUp(request, CancellationToken.None);
             return Ok(resposta);
+        }
+
+        [HttpPost("ResetPassword")]
+        [ProducesResponseType<UserRegisterViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [TypeFilter<LoginHeadersFilter>]
+        public async Task<IActionResult> ResetPassword(
+            [FromBody] LoginViewModel.ResetPassword request,
+            [FromServices] ILoginApp app)
+        {
+            try
+            {
+                await app.ResetPasswordAsync(request, CancellationToken.None);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao resetar a senha: " + ex.Message);
+            } 
         }
     }
 }

@@ -147,6 +147,20 @@ namespace ApiSindisure.Apps.Login
             }            
         }
 
+        public async Task<LoginViewModel.Response> ResetPasswordAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var response = await _supabaseService.ResetPasswordForEmailAsync(request, cancellationToken);
+
+                return new LoginViewModel.Response { };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao resetar a senha: " + ex.Message);
+            }
+        }    
+
         private Dictionary<string, object> ToDictionary(UserRegisterViewModel.CreateRequest request)
         {
             return new Dictionary<string, object>
