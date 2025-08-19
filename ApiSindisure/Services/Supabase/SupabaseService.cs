@@ -1,5 +1,4 @@
 ﻿using ApiSindisure.Domain.ViewModel.UserRegisterViewModel;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Supabase;
 using Supabase.Gotrue;
 using SupabaseClient = Supabase.Client;

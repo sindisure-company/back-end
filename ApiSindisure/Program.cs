@@ -43,6 +43,8 @@ using ApiSindisure.Domain.Interfaces.Apps.UserProfiles;
 using ApiSindisure.Apps.UserProfiles;
 using ApiSindisure.Domain.Interfaces.Apps.MessageSupportHistory;
 using ApiSindisure.Apps.MessageSupportHistory;
+using ApiSindisure.Domain.Interfaces.Apps.FileUpload;
+using ApiSindisure.Apps.FileUpload;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +72,7 @@ builder.Services.AddSingleton<INotificationHistoryApp, NotificationHistoryApp>()
 builder.Services.AddSingleton<IMessageSupportApp, MessageSupportApp>();
 builder.Services.AddSingleton<IMessageSupportHistoryApp, MessageSupportHistoryApp>();
 builder.Services.AddSingleton<IAuditApp, AuditApp>();
+builder.Services.AddSingleton<IFileUploadApp, FileUploadApp>();
 
 builder.Services.AddScoped<IEmailReportsApp, EmailReportsApp>();
 
