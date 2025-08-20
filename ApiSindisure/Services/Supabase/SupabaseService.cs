@@ -20,7 +20,7 @@ namespace ApiSindisure.Services.Supabase
         public SupabaseService(IConfiguration configuration, HttpClient httpClient)
         {
             _url = configuration["Supabase:Url"];
-            _anonKey = configuration["Supabase:AnonKey"];
+            _anonKey = configuration["Supabase:ServiceRoles"];
             _httpClient = httpClient;
 
             var options = new SupabaseOptions
@@ -116,7 +116,31 @@ namespace ApiSindisure.Services.Supabase
 
         }
 
-        public async Task<bool> UpdateUserPassword(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
+        public async Task<bool> UpdateRecoverPasswordAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
+        {
+
+           try
+            {
+
+                var response = await _client.Auth.Update(new UserAttributes { Password = request.NewPassword });
+
+                if (response?.Email != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+             
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao resetar senha");
+            }
+        }
+
+        public async Task<bool> UpdateUserAccessPassword(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
         {
             var requestUrl = $"{_url}/auth/v1/user";
 
@@ -127,7 +151,7 @@ namespace ApiSindisure.Services.Supabase
 
             var jsonBody = JsonConvert.SerializeObject(body);
             var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-            
+
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
             _httpClient.DefaultRequestHeaders.Add("apikey", _anonKey);
 
@@ -135,6 +159,7 @@ namespace ApiSindisure.Services.Supabase
 
             return response.IsSuccessStatusCode;
         }
+        
 
     }
 }

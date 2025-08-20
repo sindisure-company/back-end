@@ -61,18 +61,18 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
-        [HttpPost("ResetPassword")]
+        [HttpPost("RecoverResetPassword")]
         [ProducesResponseType<UserRegisterViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [TypeFilter<LoginHeadersFilter>]
-        public async Task<IActionResult> ResetPassword(
+        public async Task<IActionResult> RecoverResetPassword(
             [FromBody] LoginViewModel.ResetPassword request,
             [FromServices] ILoginApp app)
         {
             try
             {
-                await app.UpdateUserPasswordAsync(request, CancellationToken.None);
+                await app.UpdateRecoverPasswordAsync(request, CancellationToken.None);
                 return Ok();
             }
             catch (Exception ex)

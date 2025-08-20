@@ -52,15 +52,15 @@ namespace ApiSindisure.Apps.FileUpload
                 throw new Exception("Erro ao fazer upload do arquivo", ex);
             }
         }
-        
+
         public async Task<FileUploadViewModel.Response> DownloadFileAsync(FileUploadViewModel.Download request, CancellationToken cancellationToken)
         {
             var client = _supabaseService.GetClient();
             var bucket = client.Storage.From("account-receipts");
 
             var prefix = "account-receipts/";
-            var relativeFilePath = request.FilePath.Contains(prefix) 
-                ? request.FilePath.Substring(request.FilePath.IndexOf(prefix) + prefix.Length) 
+            var relativeFilePath = request.FilePath.Contains(prefix)
+                ? request.FilePath.Substring(request.FilePath.IndexOf(prefix) + prefix.Length)
                 : request.FilePath;
 
             var fileBytes = await bucket.Download(relativeFilePath, (EventHandler<float>?)null);
@@ -73,5 +73,30 @@ namespace ApiSindisure.Apps.FileUpload
                 FileName = relativeFilePath
             };
         }    
+        
+        public async Task<bool> DeleteFileAsync(FileUploadViewModel.Delete request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var client = _supabaseService.GetClient();
+
+                var bucket = client.Storage.From("account-receipts");
+
+                var prefix = "account-receipts/";
+                var relativeFilePath = request.FilePath.Contains(prefix)
+                    ? request.FilePath.Substring(request.FilePath.IndexOf(prefix) + prefix.Length)
+                    : request.FilePath;
+
+                    var response = await bucket.Remove(new List<string> { relativeFilePath });
+
+                    return response != null && response.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao deletar arquivo do storage: {ex.Message}");
+                return false;
+            }
+        }
+
     }
 }

@@ -54,8 +54,7 @@ namespace ApiSindisure.Apps.Login
                         },
                         UserMetadata = new LoginViewModel.UserMetadata
                         {
-                            Address = user.UserMetadata?["address"]?.ToString(),
-                            Cep = user.UserMetadata?["cep"]?.ToString(),
+                            Address = user.UserMetadata?["address"]?.ToString(),                            
                             City = user.UserMetadata?["city"]?.ToString(),
                             DateOfBirth = Convert.ToDateTime(user.UserMetadata?["date_of_birth"]?.ToString()),
                             DocumentNumber = user.UserMetadata?["document_number"]?.ToString(),
@@ -63,8 +62,7 @@ namespace ApiSindisure.Apps.Login
                             EmailVerified = user.UserMetadata?["email_verified"] != null &&
                                             bool.TryParse(user.UserMetadata["email_verified"].ToString(), out var ev) ? ev : false,
                             FirstName = user.UserMetadata?["first_name"]?.ToString(),
-                            LastName = user.UserMetadata?["last_name"]?.ToString(),
-                            Neighborhood = user.UserMetadata?["neighborhood"]?.ToString(),
+                            LastName = user.UserMetadata?["last_name"]?.ToString(),                           
                             Number = user.UserMetadata?["number"]?.ToString(),
                             Phone = user.UserMetadata?["phone"]?.ToString(),
                             PhoneVerified = user.UserMetadata?["phone_verified"] != null &&
@@ -80,8 +78,7 @@ namespace ApiSindisure.Apps.Login
                             UserId = i.UserId,
                             IdentityData = new LoginViewModel.UserMetadata
                             {
-                                Address = i.IdentityData?["address"]?.ToString(),
-                                Cep = i.IdentityData?["cep"]?.ToString(),
+                                Address = i.IdentityData?["address"]?.ToString(),                                
                                 City = i.IdentityData?["city"]?.ToString(),
                                 DateOfBirth = Convert.ToDateTime(i.IdentityData?["date_of_birth"]?.ToString()),
                                 DocumentNumber = i.IdentityData?["document_number"]?.ToString(),
@@ -89,8 +86,7 @@ namespace ApiSindisure.Apps.Login
                                 EmailVerified = i.IdentityData?["email_verified"] != null &&
                                                 bool.TryParse(i.IdentityData["email_verified"].ToString(), out var iev) ? iev : false,
                                 FirstName = i.IdentityData?["first_name"]?.ToString(),
-                                LastName = i.IdentityData?["last_name"]?.ToString(),
-                                Neighborhood = i.IdentityData?["neighborhood"]?.ToString(),
+                                LastName = i.IdentityData?["last_name"]?.ToString(),                              
                                 Number = i.IdentityData?["number"]?.ToString(),
                                 Phone = i.IdentityData?["phone"]?.ToString(),
                                 PhoneVerified = i.IdentityData?["phone_verified"] != null &&
@@ -161,11 +157,11 @@ namespace ApiSindisure.Apps.Login
             }
         }  
 
-        public async Task<LoginViewModel.Response> UpdateUserPasswordAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
+        public async Task<LoginViewModel.Response> UpdateRecoverPasswordAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken)
         {
             try
             {
-                var response = await _supabaseService.UpdateUserPassword(request, cancellationToken);
+                var response = await _supabaseService.UpdateRecoverPasswordAsync(request, cancellationToken);
 
                 return new LoginViewModel.Response { };
             }

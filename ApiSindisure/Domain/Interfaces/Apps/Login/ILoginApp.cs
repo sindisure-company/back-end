@@ -8,6 +8,6 @@ namespace ApiSindisure.Domain.Interfaces.Apps.Login
         Task<LoginViewModel.Response> HandleAsync(LoginViewModel.Request request, CancellationToken cancellationToken);
         Task<UserRegisterViewModel.Response> SignUp(UserRegisterViewModel.CreateRequest request, CancellationToken cancellationToken);
         Task<LoginViewModel.Response> SendLinkResetPasswordAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken);
-        Task<LoginViewModel.Response> UpdateUserPasswordAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken);
+        Task<LoginViewModel.Response> UpdateRecoverPasswordAsync(LoginViewModel.ResetPassword request, CancellationToken cancellationToken);
     }
 }
