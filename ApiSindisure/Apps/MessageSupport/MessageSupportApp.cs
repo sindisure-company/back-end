@@ -39,6 +39,7 @@ namespace ApiSindisure.Apps.MessageSupport
                 {
                     Id = model.Id,
                     Message = model.Message,
+                    ResponseMessage = model.Response,
                     Read = model.Read,                 
                     Subject = model.Subject,
                     UserId = model.UserId,
@@ -142,12 +143,27 @@ namespace ApiSindisure.Apps.MessageSupport
                 
                 var retornoGet = resultGet.Models.FirstOrDefault();
 
-                if (request.Message is null)
+                if (request.Response is null && !request.Read)
                 {
                     model = new MessageSupportModel
                     {
                         Id = retornoGet.Id,
                         Message = retornoGet.Message,
+                        Response = retornoGet.Response,
+                        Read = request.Read,
+                        Subject = retornoGet.Subject,
+                        UpdatedAt = DateTime.UtcNow,
+                        CreatedAt = retornoGet.CreatedAt,
+                        UserId = retornoGet.UserId
+                    };
+                }
+                else if (request.Response is null && !request.Read)
+                {
+                    model = new MessageSupportModel
+                    {
+                        Id = retornoGet.Id,
+                        Message = retornoGet.Message,
+                        Response = request.Response,
                         Read = request.Read,
                         Subject = retornoGet.Subject,
                         UpdatedAt = DateTime.UtcNow,
@@ -160,13 +176,14 @@ namespace ApiSindisure.Apps.MessageSupport
                     model = new MessageSupportModel
                     {
                         Id = retornoGet.Id,
-                        Message = request.Message,
+                        Message = retornoGet.Message,
+                        Response = request.Response,
                         Read = request.Read,
                         Subject = retornoGet.Subject,
                         UpdatedAt = DateTime.UtcNow,
                         CreatedAt = retornoGet.CreatedAt,
                         UserId = retornoGet.UserId
-                    };  
+                    };
                 }                             
 
                 var result = await client
