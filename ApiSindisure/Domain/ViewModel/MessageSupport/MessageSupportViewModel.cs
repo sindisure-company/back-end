@@ -67,6 +67,10 @@ namespace ApiSindisure.Domain.ViewModel.MessageSupportViewModel
             [JsonPropertyName("read")]
             public bool Read { get; set; }
 
+            [Required]        
+            [JsonPropertyName("response")]
+            public string? ResponseMessage { get; set; }
+
             [Required]
             [JsonPropertyName("subject")]
             public string? Subject { get; set; }

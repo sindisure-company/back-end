@@ -50,8 +50,8 @@ namespace ApiSindisure.Apps.MessageSupportHistory
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
-
-        public async Task<List<MessageSupportHistoryViewModel.Response>> GetMessageUniqueSupportHistoryAsync(MessageSupportHistoryViewModel.GetRequest request, CancellationToken cancellationToken)
+        
+        public async Task<List<MessageSupportHistoryViewModel.Response>> GetMessageListSupportHistoryAsync(MessageSupportHistoryViewModel.GetRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -75,6 +75,41 @@ namespace ApiSindisure.Apps.MessageSupportHistory
                     Id = model.Id,
                     Message = model.Message,
                     IsAdminResponse = model.IsAdminResponse,                 
+                    SupportMessageId = model.SupportMessageId,
+                    UserId = model.UserId,
+                    CreatedAt = model.CreatedAt
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
+
+        public async Task<List<MessageSupportHistoryViewModel.Response>> GetMessageUniqueSupportHistoryAsync(MessageSupportHistoryViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("MessageSupportHistoryId não pode ser nulo ou vazio.");
+
+                if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("MessageSupportHistoryId inválido. Deve ser um UUID.");
+
+                var client = _supabaseService.GetClient();
+
+                var result = await client
+                    .From<MessageSupportHistoryModel>()
+                    .Select("*")
+                    .Filter("support_message_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                return result.Models.Select(model => new MessageSupportHistoryViewModel.Response
+                {
+                    Id = model.Id,
+                    Message = model.Message,
+                    IsAdminResponse = model.IsAdminResponse,
                     SupportMessageId = model.SupportMessageId,
                     UserId = model.UserId,
                     CreatedAt = model.CreatedAt

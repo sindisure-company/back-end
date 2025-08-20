@@ -55,6 +55,25 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpGet("GetMessageListSupportHistory/{id}")]
+        [ProducesResponseType<List<MessageSupportHistoryViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetMessageListSupportHistory(   
+            string id,        
+            [FromServices] IMessageSupportHistoryApp app)
+        {
+            try
+            {                
+                var request = new MessageSupportHistoryViewModel.GetRequest { Id = id};
+                var response = await app.GetMessageListSupportHistoryAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar fornecedores. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType<MessageSupportHistoryViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
