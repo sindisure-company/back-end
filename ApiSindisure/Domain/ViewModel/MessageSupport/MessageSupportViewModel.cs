@@ -33,27 +33,22 @@ namespace ApiSindisure.Domain.ViewModel.MessageSupportViewModel
         }
 
         public class UpdateRequest : BaseEntity
-        {
-            [Required]        
+        {    
             [JsonPropertyName("message")]
             public string? Message { get; set; }
-
-            [Required]        
+      
             [JsonPropertyName("read")]
             public bool Read { get; set; }
           
             [JsonPropertyName("response")]
             public string? Response { get; set; }
 
-            [Required]
             [JsonPropertyName("subject")]
             public string? Subject { get; set; }
 
-            [Required]
             [JsonPropertyName("category")]
             public string? UpdatedAt { get; set; }
 
-            [Required]
             [JsonPropertyName("user_id")]
             public string? UserId { get; set; }
            

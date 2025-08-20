@@ -51,17 +51,52 @@ namespace ApiSindisure.Apps.MessageSupport
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
+        
+        public async Task<List<MessageSupportViewModel.Response>> GetMessageAdminSupportAsync(MessageSupportViewModel.GetRequest request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.Id))
+                    throw new ArgumentException("MessageSupportId não pode ser nulo ou vazio.");
+
+                 if (!Guid.TryParse(request.Id, out _))
+                    throw new Exception("MessageSupportId inválido. Deve ser um UUID.");
+                    
+                var client = _supabaseService.GetClient();               
+
+                var result = await client
+                    .From<MessageSupportModel>()
+                    .Select("*")                    
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                return result.Models.Select(model => new MessageSupportViewModel.Response
+                {
+                    Id = model.Id,
+                    Message = model.Message,
+                    Read = model.Read,                 
+                    Subject = model.Subject,
+                    UserId = model.UserId,
+                    UpdatedAt = model.UpdatedAt,
+                    CreatedAt = model.CreatedAt
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
 
         public async Task<MessageSupportViewModel.Response> CreateMessageSupportAsync(MessageSupportViewModel.CreateRequest request, CancellationToken cancellationToken)
         {
             try
-            {                
+            {
                 var client = _supabaseService.GetClient();
                 var model = new MessageSupportModel
                 {
                     Id = Guid.NewGuid().ToString(),
                     Message = request.Message,
-                    Read = request.Read,                 
+                    Read = request.Read,
                     Subject = request.Subject,
                     UpdatedAt = DateTime.UtcNow,
                     CreatedAt = DateTime.UtcNow,
@@ -96,15 +131,43 @@ namespace ApiSindisure.Apps.MessageSupport
             try
             {
                 var client = _supabaseService.GetClient();
-                var model = new MessageSupportModel
+                var model = new MessageSupportModel();
+
+                var resultGet = await client
+                    .From<MessageSupportModel>()
+                    .Select("*")
+                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+                
+                var retornoGet = resultGet.Models.FirstOrDefault();
+
+                if (request.Message is null)
                 {
-                    Id = request.Id,
-                    Message = request.Message,
-                    Read = request.Read,
-                    Subject = request.Subject,
-                    UpdatedAt = DateTime.UtcNow,
-                    UserId = request.UserId
-                };               
+                    model = new MessageSupportModel
+                    {
+                        Id = retornoGet.Id,
+                        Message = retornoGet.Message,
+                        Read = request.Read,
+                        Subject = retornoGet.Subject,
+                        UpdatedAt = DateTime.UtcNow,
+                        CreatedAt = retornoGet.CreatedAt,
+                        UserId = retornoGet.UserId
+                    };
+                }
+                else
+                {
+                    model = new MessageSupportModel
+                    {
+                        Id = retornoGet.Id,
+                        Message = request.Message,
+                        Read = request.Read,
+                        Subject = retornoGet.Subject,
+                        UpdatedAt = DateTime.UtcNow,
+                        CreatedAt = retornoGet.CreatedAt,
+                        UserId = retornoGet.UserId
+                    };  
+                }                             
 
                 var result = await client
                     .From<MessageSupportModel>()

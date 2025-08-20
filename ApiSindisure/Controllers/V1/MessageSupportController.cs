@@ -36,6 +36,32 @@ namespace ApiSindisure.Controllers.V1
             }
         }
 
+        [HttpGet("GetMessageSupportAdmin")]
+        [ProducesResponseType<List<MessageSupportViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetMessageSupportAdmin(            
+            [FromServices] IMessageSupportApp app)
+        {
+            try
+            {
+                var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                if (string.IsNullOrEmpty(token))
+                    return BadRequest(new { error = "Token não pode ser nulo ou vazio." });
+
+                var id = JwtHelper.GetSubFromUserMetadata(token);
+                if (string.IsNullOrEmpty(id))
+                    return BadRequest(new { error = "ID do usuário não encontrado no token." });      
+                
+                var request = new MessageSupportViewModel.GetRequest { Id = id};
+                var response = await app.GetMessageAdminSupportAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar fornecedores. Mais detalhes: " + ex.Message });
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType<MessageSupportViewModel.Response>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
