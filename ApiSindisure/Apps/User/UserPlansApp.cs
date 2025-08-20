@@ -30,8 +30,7 @@ namespace ApiSindisure.Apps.UserPlans
 
                 var result = await client
                     .From<UserPlansModel>()
-                    .Select("*")
-                    .Filter("created_by", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Select("*")                    
                     .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
                     .Get();
 

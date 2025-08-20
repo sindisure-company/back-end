@@ -35,6 +35,22 @@ namespace ApiSindisure.Controllers.V1
                 return BadRequest(new { error = "Erro ao buscar fornecedores. Mais detalhes: " + ex.Message });
             }
         }
+        [HttpGet("GetListUserDetails")]
+        [ProducesResponseType<List<UserDetailsViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetListUserDetails(            
+            [FromServices] IUserDetailsApp app)
+        {
+            try
+            { 
+                var response = await app.GetListUserDetailsAsync(CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar fornecedores. Mais detalhes: " + ex.Message });
+            }
+        }
 
         [HttpPost]
         [ProducesResponseType<UserDetailsViewModel.Response>(StatusCodes.Status200OK)]

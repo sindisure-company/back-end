@@ -65,11 +65,55 @@ namespace ApiSindisure.Apps.UserDetails
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
+        
+        public async Task<List<UserDetailsViewModel.Response>> GetListUserDetailsAsync(CancellationToken cancellationToken)
+        {
+            try
+            {               
+                    
+                var client = _supabaseService.GetClient();               
+
+                var result = await client
+                    .From<UserDetailsModel>()
+                    .Select("*")                    
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+
+                var model = result.Models.FirstOrDefault();
+
+                return result.Models.Select(model => new UserDetailsViewModel.Response
+                {
+                    Id = model.Id,
+                    AuthUserId = model.AuthUserId,
+                    Email = model.Email,
+                    Address = model.Address,
+                    AvatarUrl = model.AvatarUrl,
+                    City = model.City,
+                    DocumentNumber = model.DocumentNumber,
+                    FileName = model.FileName,
+                    FileUrl = model.FileUrl,
+                    FirstName = model.FirstName,
+                    ImgAvatar = model.ImgAvatar,
+                    LastName = model.LastName,
+                    Neighborhood = model.Neighborhood,
+                    Number = model.Number,
+                    Phone = model.Phone,
+                    State = model.State,
+                    CreatedAt = model.CreatedAt,
+                    UpdatedAt = model.UpdatedAt,
+
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao buscar contas a pagar", ex);
+            }
+        }
 
         public async Task<UserDetailsViewModel.Response> CreateUserDetailsAsync(UserDetailsViewModel.CreateRequest request, CancellationToken cancellationToken)
         {
             try
-            {                
+            {
                 var client = _supabaseService.GetClient();
                 var model = new UserDetailsModel
                 {
