@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using ApiSindisure.Domain.Interfaces.Apps.Buildings;
 using ApiSindisure.Domain.ViewModel.Buildings;
 using ApiSindisure.Services.Supabase;
@@ -8,10 +7,14 @@ namespace ApiSindisure.Apps.Buildings
     public class BuildingsApp : IBuildingsApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<BuildingsApp> _logger;
+        public string LogId { get; set; }
 
-        public BuildingsApp(SupabaseService supabaseService)
+        public BuildingsApp(SupabaseService supabaseService, ILogger<BuildingsApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<BuildingsViewModel.Response>> GetBuildingsAsync(BuildingsViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -51,6 +54,7 @@ namespace ApiSindisure.Apps.Buildings
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(BuildingsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -97,6 +101,7 @@ namespace ApiSindisure.Apps.Buildings
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(BuildingsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -145,6 +150,7 @@ namespace ApiSindisure.Apps.Buildings
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(BuildingsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -161,6 +167,7 @@ namespace ApiSindisure.Apps.Buildings
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(BuildingsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

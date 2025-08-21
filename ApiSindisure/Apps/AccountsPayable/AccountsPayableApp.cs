@@ -8,10 +8,14 @@ namespace ApiSindisure.Apps.AccountsPayable
     public class AccountsPayableApp : IAccountsPayableApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<AccountsPayableApp> _logger;
+        public string LogId { get; set; }
 
-        public AccountsPayableApp(SupabaseService supabaseService)
+        public AccountsPayableApp(SupabaseService supabaseService, ILogger<AccountsPayableApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<AccountsPayableViewModel.Response>> GetAccountsPayableAsync(AccountsPayableViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -55,6 +59,7 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AccountsPayableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -100,6 +105,7 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AccountsPayableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -147,6 +153,7 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AccountsPayableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -201,6 +208,7 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AccountsPayableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar conta a pagar", ex);
             }
         }
@@ -261,6 +269,7 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AccountsPayableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar conta a pagar", ex);
             }
         }
@@ -328,6 +337,7 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AccountsPayableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar conta a pagar", ex);
             }
         }
@@ -372,6 +382,7 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AccountsPayableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar conta a pagar", ex);
             }
         }
@@ -448,6 +459,7 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AccountsPayableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar conta a pagar", ex);
             }
         }
@@ -464,6 +476,7 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AccountsPayableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir conta a pagar", ex);
             }
         }
@@ -482,6 +495,7 @@ namespace ApiSindisure.Apps.AccountsPayable
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AccountsPayableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir conta a pagar", ex);
             }
         }

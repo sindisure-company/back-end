@@ -10,10 +10,14 @@ namespace ApiSindisure.Apps.UserDetails
     public class UserDetailsApp : IUserDetailsApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<UserDetailsApp> _logger;
+        public string LogId { get; set; }
 
-        public UserDetailsApp(SupabaseService supabaseService)
+        public UserDetailsApp(SupabaseService supabaseService, ILogger<UserDetailsApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<UserDetailsViewModel.Response> GetUserDetailsAsync(UserDetailsViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -62,6 +66,7 @@ namespace ApiSindisure.Apps.UserDetails
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserDetailsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -106,6 +111,7 @@ namespace ApiSindisure.Apps.UserDetails
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserDetailsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -167,6 +173,7 @@ namespace ApiSindisure.Apps.UserDetails
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserDetailsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -241,6 +248,7 @@ namespace ApiSindisure.Apps.UserDetails
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserDetailsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -257,6 +265,7 @@ namespace ApiSindisure.Apps.UserDetails
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserDetailsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

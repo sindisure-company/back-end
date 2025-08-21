@@ -1,19 +1,20 @@
-using System.Security.Cryptography.X509Certificates;
 using ApiSindisure.Domain.Interfaces.Apps.CompaniesRecurring;
 using ApiSindisure.Domain.ViewModel.CompaniesRecurringViewModel;
 using ApiSindisure.Services.Supabase;
-
-using Supabase.Postgrest.Attributes;
 
 namespace ApiSindisure.Apps.CompaniesRecurring
 {
     public class CompaniesRecurringApp : ICompaniesRecurringApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<CompaniesRecurringApp> _logger;
+        public string LogId { get; set; }
 
-        public CompaniesRecurringApp(SupabaseService supabaseService)
+        public CompaniesRecurringApp(SupabaseService supabaseService, ILogger<CompaniesRecurringApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<CompaniesRecurringViewModel.Response>> GetCompaniesRecurringAsync(CompaniesRecurringViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -54,6 +55,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(CompaniesRecurringApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -96,6 +98,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(CompaniesRecurringApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -139,6 +142,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(CompaniesRecurringApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -189,6 +193,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(CompaniesRecurringApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -249,6 +254,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(CompaniesRecurringApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -265,6 +271,7 @@ namespace ApiSindisure.Apps.CompaniesRecurring
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(CompaniesRecurringApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

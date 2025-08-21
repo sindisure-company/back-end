@@ -1,9 +1,6 @@
 using System.Text;
 using ApiSindisure.Domain.Interfaces.Apps.EmailReportsApp;
-using ApiSindisure.Domain.ViewModel.Condominium;
-using ApiSindisure.Domain.ViewModel.EmailAutomationViewModel;
 using ApiSindisure.Domain.ViewModel.EmailViewModel;
-using ApiSindisure.Domain.ViewModel.UserDetailsViewModel;
 using ApiSindisure.Services.Supabase;
 using Resend;
 using QuestPDF.Fluent;
@@ -16,11 +13,15 @@ namespace ApiSindisure.Apps.EmailReportsApp
     {
         private readonly SupabaseService _supabaseService;
         private readonly ResendClient _resendClient;
+        private readonly ILogger<EmailReportsApp> _logger;
+        public string LogId { get; set; }
 
-        public EmailReportsApp(SupabaseService supabaseService,ResendClient resendClient)
+        public EmailReportsApp(SupabaseService supabaseService, ResendClient resendClient, ILogger<EmailReportsApp> logger)
         {
             _supabaseService = supabaseService;
             _resendClient = resendClient;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task SendMonthlyReportAsync(
@@ -109,6 +110,7 @@ namespace ApiSindisure.Apps.EmailReportsApp
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(EmailReportsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao enviar relatório mensal", ex);
             }
         }

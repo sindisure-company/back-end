@@ -19,9 +19,5 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ApiSindisure.Domain\ApiSindisure.Domain.csproj" />
-    <ProjectReference Include="..\ApiSindisure.Services\ApiSindisure.Application.csproj" />
-  </ItemGroup>
 
 </Project>

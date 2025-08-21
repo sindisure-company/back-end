@@ -8,10 +8,14 @@ namespace ApiSindisure.Apps.Condominium
     public class CondominiumApp : ICondominiumApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<CondominiumApp> _logger;
+        public string LogId { get; set; }
 
-        public CondominiumApp(SupabaseService supabaseService)
+        public CondominiumApp(SupabaseService supabaseService, ILogger<CondominiumApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<CondominiumViewModel.Response>> GetCondominiumAsync(CondominiumViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -51,6 +55,7 @@ namespace ApiSindisure.Apps.Condominium
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(CondominiumApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -99,6 +104,7 @@ namespace ApiSindisure.Apps.Condominium
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(CondominiumApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -155,6 +161,7 @@ namespace ApiSindisure.Apps.Condominium
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(CondominiumApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -171,6 +178,7 @@ namespace ApiSindisure.Apps.Condominium
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(CondominiumApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

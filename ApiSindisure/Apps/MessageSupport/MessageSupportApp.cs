@@ -1,19 +1,20 @@
-using System.Security.Cryptography.X509Certificates;
 using ApiSindisure.Domain.Interfaces.Apps.MessageSupport;
 using ApiSindisure.Domain.ViewModel.MessageSupportViewModel;
 using ApiSindisure.Services.Supabase;
-
-using Supabase.Postgrest.Attributes;
 
 namespace ApiSindisure.Apps.MessageSupport
 {
     public class MessageSupportApp : IMessageSupportApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<MessageSupportApp> _logger;
+        public string LogId { get; set; }
 
-        public MessageSupportApp(SupabaseService supabaseService)
+        public MessageSupportApp(SupabaseService supabaseService, ILogger<MessageSupportApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<MessageSupportViewModel.Response>> GetMessageSupportAsync(MessageSupportViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -49,6 +50,7 @@ namespace ApiSindisure.Apps.MessageSupport
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -84,6 +86,7 @@ namespace ApiSindisure.Apps.MessageSupport
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -123,6 +126,7 @@ namespace ApiSindisure.Apps.MessageSupport
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -205,6 +209,7 @@ namespace ApiSindisure.Apps.MessageSupport
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -221,6 +226,7 @@ namespace ApiSindisure.Apps.MessageSupport
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

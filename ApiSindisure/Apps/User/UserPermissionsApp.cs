@@ -1,19 +1,20 @@
-using System.Security.Cryptography.X509Certificates;
 using ApiSindisure.Domain.Interfaces.Apps.UserPermissions;
 using ApiSindisure.Domain.ViewModel.UserPermissionsViewModel;
 using ApiSindisure.Services.Supabase;
-
-using Supabase.Postgrest.Attributes;
 
 namespace ApiSindisure.Apps.UserPermissions
 {
     public class UserPermissionsApp : IUserPermissionsApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<UserPermissionsApp> _logger;
+        public string LogId { get; set; }
 
-        public UserPermissionsApp(SupabaseService supabaseService)
+        public UserPermissionsApp(SupabaseService supabaseService, ILogger<UserPermissionsApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<UserPermissionsViewModel.Response>> GetUserPermissionsAsync(UserPermissionsViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -45,6 +46,7 @@ namespace ApiSindisure.Apps.UserPermissions
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPermissionsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -84,6 +86,7 @@ namespace ApiSindisure.Apps.UserPermissions
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPermissionsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -119,6 +122,7 @@ namespace ApiSindisure.Apps.UserPermissions
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPermissionsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -153,6 +157,7 @@ namespace ApiSindisure.Apps.UserPermissions
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPermissionsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -169,6 +174,7 @@ namespace ApiSindisure.Apps.UserPermissions
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPermissionsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

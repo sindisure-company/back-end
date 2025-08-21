@@ -1,19 +1,20 @@
-using System.Security.Cryptography.X509Certificates;
 using ApiSindisure.Domain.Interfaces.Apps.UserPlansHistory;
 using ApiSindisure.Domain.ViewModel.UserPlansHistoryViewModel;
 using ApiSindisure.Services.Supabase;
-
-using Supabase.Postgrest.Attributes;
 
 namespace ApiSindisure.Apps.UserPlansHistory
 {
     public class UserPlansHistoryApp : IUserPlansHistoryApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<UserPlansHistoryApp> _logger;
+        public string LogId { get; set; }
 
-        public UserPlansHistoryApp(SupabaseService supabaseService)
+        public UserPlansHistoryApp(SupabaseService supabaseService, ILogger<UserPlansHistoryApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<UserPlansHistoryViewModel.Response>> GetUserPlansHistoryAsync(UserPlansHistoryViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -51,6 +52,7 @@ namespace ApiSindisure.Apps.UserPlansHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPlansHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -98,6 +100,7 @@ namespace ApiSindisure.Apps.UserPlansHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPlansHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -145,6 +148,7 @@ namespace ApiSindisure.Apps.UserPlansHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPlansHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -161,6 +165,7 @@ namespace ApiSindisure.Apps.UserPlansHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPlansHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

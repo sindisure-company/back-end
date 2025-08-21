@@ -1,5 +1,4 @@
-﻿using ApiSindisure.Domain.Contants.Validations;
-using ApiSindisure.Domain.ViewModel.Login;
+﻿using ApiSindisure.Domain.ViewModel.Login;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -14,11 +13,7 @@ namespace ApiSindisure.Filters.Login
             var headers = context.HttpContext.Request.Headers;
             if(context.ActionArguments.TryGetValue("request", out var request) && request is LoginViewModel.Request loginRequest)
             {
-                if (string.IsNullOrEmpty(loginRequest.Email))
-                    throw new ArgumentException(ErroValidationLogin.ERRO_VALIDACOES_LOGIN);
-
-                if (string.IsNullOrEmpty(loginRequest.Password))
-                    throw new ArgumentException(ErroValidationLogin.ERRO_VALIDACOES_LOGIN);
+               
             }
 
             var resultContext = await next();

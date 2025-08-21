@@ -8,11 +8,15 @@ namespace ApiSindisure.Apps.FileUpload
     {
         private readonly SupabaseService _supabaseService;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<FileUploadApp> _logger;
+        public string LogId { get; set; }
 
-        public FileUploadApp(SupabaseService supabaseService, IConfiguration configuration)
+        public FileUploadApp(SupabaseService supabaseService, IConfiguration configuration, ILogger<FileUploadApp> logger)
         {
             _supabaseService = supabaseService;
             _configuration = configuration;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<FileUploadViewModel.Response> FileUploadAsync(FileUploadViewModel.Request request, CancellationToken cancellationToken)
@@ -49,29 +53,39 @@ namespace ApiSindisure.Apps.FileUpload
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(FileUploadApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao fazer upload do arquivo", ex);
             }
         }
 
         public async Task<FileUploadViewModel.Response> DownloadFileAsync(FileUploadViewModel.Download request, CancellationToken cancellationToken)
         {
-            var client = _supabaseService.GetClient();
-            var bucket = client.Storage.From("account-receipts");
-
-            var prefix = "account-receipts/";
-            var relativeFilePath = request.FilePath.Contains(prefix)
-                ? request.FilePath.Substring(request.FilePath.IndexOf(prefix) + prefix.Length)
-                : request.FilePath;
-
-            var fileBytes = await bucket.Download(relativeFilePath, (EventHandler<float>?)null);
-
-            var base64String = Convert.ToBase64String(fileBytes);
-
-            return new FileUploadViewModel.Response
+            try
             {
-                FileResponse = base64String,
-                FileName = relativeFilePath
-            };
+                var client = _supabaseService.GetClient();
+                            var bucket = client.Storage.From("account-receipts");
+
+                            var prefix = "account-receipts/";
+                            var relativeFilePath = request.FilePath.Contains(prefix)
+                                ? request.FilePath.Substring(request.FilePath.IndexOf(prefix) + prefix.Length)
+                                : request.FilePath;
+
+                            var fileBytes = await bucket.Download(relativeFilePath, (EventHandler<float>?)null);
+
+                            var base64String = Convert.ToBase64String(fileBytes);
+
+                            return new FileUploadViewModel.Response
+                            {
+                                FileResponse = base64String,
+                                FileName = relativeFilePath
+                            };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{nameof(FileUploadApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                throw new Exception("Erro ao fazer download do arquivo", ex);
+            }
+            
         }    
         
         public async Task<bool> DeleteFileAsync(FileUploadViewModel.Delete request, CancellationToken cancellationToken)
@@ -93,7 +107,7 @@ namespace ApiSindisure.Apps.FileUpload
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao deletar arquivo do storage: {ex.Message}");
+                _logger.LogError($"{nameof(FileUploadApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 return false;
             }
         }

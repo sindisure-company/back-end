@@ -1,19 +1,20 @@
-using System.Security.Cryptography.X509Certificates;
 using ApiSindisure.Domain.Interfaces.Apps.UserProfiles;
 using ApiSindisure.Domain.ViewModel.UserProfilesViewModel;
 using ApiSindisure.Services.Supabase;
-
-using Supabase.Postgrest.Attributes;
 
 namespace ApiSindisure.Apps.UserProfiles
 {
     public class UserProfilesApp : IUserProfilesApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<UserProfilesApp> _logger;
+        public string LogId { get; set; }
 
-        public UserProfilesApp(SupabaseService supabaseService)
+        public UserProfilesApp(SupabaseService supabaseService, ILogger<UserProfilesApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<UserProfilesViewModel.Response>> GetUserProfilesAsync(UserProfilesViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -56,6 +57,7 @@ namespace ApiSindisure.Apps.UserProfiles
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserProfilesApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -105,6 +107,7 @@ namespace ApiSindisure.Apps.UserProfiles
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserProfilesApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar profile", ex);
             }
         }
@@ -160,6 +163,7 @@ namespace ApiSindisure.Apps.UserProfiles
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserProfilesApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -216,6 +220,7 @@ namespace ApiSindisure.Apps.UserProfiles
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserProfilesApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -232,6 +237,7 @@ namespace ApiSindisure.Apps.UserProfiles
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserProfilesApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

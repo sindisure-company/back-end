@@ -1,19 +1,20 @@
-using System.Security.Cryptography.X509Certificates;
 using ApiSindisure.Domain.Interfaces.Apps.UserPlans;
 using ApiSindisure.Domain.ViewModel.UserPlansViewModel;
 using ApiSindisure.Services.Supabase;
-
-using Supabase.Postgrest.Attributes;
 
 namespace ApiSindisure.Apps.UserPlans
 {
     public class UserPlansApp : IUserPlansApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<UserPlansApp> _logger;
+        public string LogId { get; set; }
 
-        public UserPlansApp(SupabaseService supabaseService)
+        public UserPlansApp(SupabaseService supabaseService, ILogger<UserPlansApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<UserPlansViewModel.Response>> GetUserPlansAsync(UserPlansViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -48,6 +49,7 @@ namespace ApiSindisure.Apps.UserPlans
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPlansApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -90,6 +92,7 @@ namespace ApiSindisure.Apps.UserPlans
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPlansApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -131,6 +134,7 @@ namespace ApiSindisure.Apps.UserPlans
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPlansApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -182,6 +186,7 @@ namespace ApiSindisure.Apps.UserPlans
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPlansApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -198,6 +203,7 @@ namespace ApiSindisure.Apps.UserPlans
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(UserPlansApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

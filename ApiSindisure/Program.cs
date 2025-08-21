@@ -1,4 +1,3 @@
-using ApiSindisure.Application.Jwt;
 using ApiSindisure.Apps.Login;
 using ApiSindisure.Apps.AccountsPayable;
 using ApiSindisure.Apps.AccountsReceivable;
@@ -9,7 +8,6 @@ using ApiSindisure.Domain.Interfaces.Apps.AccountsPayable;
 using ApiSindisure.Domain.Interfaces.Apps.AccountsReceivable;
 using ApiSindisure.Domain.Interfaces.Apps.Condominium;
 using ApiSindisure.Domain.Interfaces.Apps.Audit;
-using ApiSindisure.Domain.Interfaces.Services.Jwt;
 using ApiSindisure.Services.Supabase;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -52,7 +50,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<SupabaseService>();
-builder.Services.AddSingleton<IJwtServices, JwtServices>();
 builder.Services.AddSingleton<ILoginApp, LoginApp>();
 builder.Services.AddSingleton<IAccountsPayableApp, AccountsPayableApp>();
 builder.Services.AddSingleton<IAccountsReceivableApp, AccountsReceivableApp>();
@@ -81,9 +78,12 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader(); 
+        policy.WithOrigins(
+            "https://appsindisure.com.br",
+            "http://appsindisure.com.br"
+        )
+        .AllowAnyHeader()
+        .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
     });
 });
 

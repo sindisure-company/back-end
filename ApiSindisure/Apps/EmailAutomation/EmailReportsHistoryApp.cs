@@ -1,19 +1,20 @@
-using System.Security.Cryptography.X509Certificates;
 using ApiSindisure.Domain.Interfaces.Apps.EmailReportsHistory;
 using ApiSindisure.Domain.ViewModel.EmailReportsHistoryViewModel;
 using ApiSindisure.Services.Supabase;
-
-using Supabase.Postgrest.Attributes;
 
 namespace ApiSindisure.Apps.EmailReportsHistory
 {
     public class EmailReportsHistoryApp : IEmailReportsHistoryApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<EmailReportsHistoryApp> _logger;
+        public string LogId { get; set; }
 
-        public EmailReportsHistoryApp(SupabaseService supabaseService)
+        public EmailReportsHistoryApp(SupabaseService supabaseService, ILogger<EmailReportsHistoryApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<EmailReportsHistoryViewModel.Response>> GetEmailReportsHistoryAsync(EmailReportsHistoryViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -51,6 +52,7 @@ namespace ApiSindisure.Apps.EmailReportsHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(EmailReportsHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -96,6 +98,7 @@ namespace ApiSindisure.Apps.EmailReportsHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(EmailReportsHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -140,6 +143,7 @@ namespace ApiSindisure.Apps.EmailReportsHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(EmailReportsHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -156,6 +160,7 @@ namespace ApiSindisure.Apps.EmailReportsHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(EmailReportsHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

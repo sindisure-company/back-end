@@ -10,10 +10,14 @@ namespace ApiSindisure.Apps.NotificationHistory
     public class NotificationHistoryApp : INotificationHistoryApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<NotificationHistoryApp> _logger;
+        public string LogId { get; set; }
 
-        public NotificationHistoryApp(SupabaseService supabaseService)
+        public NotificationHistoryApp(SupabaseService supabaseService, ILogger<NotificationHistoryApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<NotificationHistoryViewModel.Response>> GetNotificationHistoryAsync(NotificationHistoryViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -46,6 +50,7 @@ namespace ApiSindisure.Apps.NotificationHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(NotificationHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -83,6 +88,7 @@ namespace ApiSindisure.Apps.NotificationHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(NotificationHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -119,6 +125,7 @@ namespace ApiSindisure.Apps.NotificationHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(NotificationHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -135,6 +142,7 @@ namespace ApiSindisure.Apps.NotificationHistory
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(NotificationHistoryApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }

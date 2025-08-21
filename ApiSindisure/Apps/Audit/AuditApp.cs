@@ -9,10 +9,14 @@ namespace ApiSindisure.Apps.Audit
     public class AuditApp : IAuditApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<AuditApp> _logger;
+        public string LogId { get; set; }
 
-        public AuditApp(SupabaseService supabaseService)
+        public AuditApp(SupabaseService supabaseService, ILogger<AuditApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<AuditViewModel.Response> LogAuditAsync(AuditViewModel.LogRequest request, CancellationToken cancellationToken)
@@ -56,6 +60,7 @@ namespace ApiSindisure.Apps.Audit
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AuditApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar conta a pagar", ex);
             }
         }
@@ -106,6 +111,7 @@ namespace ApiSindisure.Apps.Audit
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(AuditApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar logs de auditoria", ex);
             }
         }

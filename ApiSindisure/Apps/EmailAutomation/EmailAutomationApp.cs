@@ -1,19 +1,20 @@
-using System.Security.Cryptography.X509Certificates;
 using ApiSindisure.Domain.Interfaces.Apps.EmailAutomation;
 using ApiSindisure.Domain.ViewModel.EmailAutomationViewModel;
 using ApiSindisure.Services.Supabase;
-
-using Supabase.Postgrest.Attributes;
 
 namespace ApiSindisure.Apps.EmailAutomation
 {
     public class EmailAutomationApp : IEmailAutomationApp
     {
         private readonly SupabaseService _supabaseService;
+        private readonly ILogger<EmailAutomationApp> _logger;
+        public string LogId { get; set; }
 
-        public EmailAutomationApp(SupabaseService supabaseService)
+        public EmailAutomationApp(SupabaseService supabaseService, ILogger<EmailAutomationApp> logger)
         {
             _supabaseService = supabaseService;
+            _logger = logger;
+            LogId = Guid.NewGuid().ToString();
         }
 
         public async Task<List<EmailAutomationViewModel.Response>> GetEmailAutomationAsync(EmailAutomationViewModel.GetRequest request, CancellationToken cancellationToken)
@@ -50,6 +51,7 @@ namespace ApiSindisure.Apps.EmailAutomation
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(EmailAutomationApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -93,6 +95,7 @@ namespace ApiSindisure.Apps.EmailAutomation
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(EmailAutomationApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -147,6 +150,7 @@ namespace ApiSindisure.Apps.EmailAutomation
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(EmailAutomationApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -163,6 +167,7 @@ namespace ApiSindisure.Apps.EmailAutomation
             }
             catch (Exception ex)
             {
+                _logger.LogError($"{nameof(EmailAutomationApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }
