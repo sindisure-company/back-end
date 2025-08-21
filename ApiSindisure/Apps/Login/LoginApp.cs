@@ -110,7 +110,7 @@ namespace ApiSindisure.Apps.Login
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(LoginApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(LoginApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 return new LoginViewModel.Response
                 {
                     ErrorMessage = "Erro interno do servidor"
@@ -139,7 +139,7 @@ namespace ApiSindisure.Apps.Login
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(LoginApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(LoginApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception(ex.Message);
             }            
         }
@@ -154,7 +154,7 @@ namespace ApiSindisure.Apps.Login
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(LoginApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(LoginApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Ocorreu um erro ao enviar link do reset de senha: " + ex.Message);
             }
         }  
@@ -169,7 +169,7 @@ namespace ApiSindisure.Apps.Login
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(LoginApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(LoginApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Ocorreu um erro ao resetar a senha: " + ex.Message);
             }
         }      

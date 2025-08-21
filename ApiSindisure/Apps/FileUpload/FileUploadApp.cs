@@ -53,7 +53,7 @@ namespace ApiSindisure.Apps.FileUpload
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(FileUploadApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(FileUploadApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao fazer upload do arquivo", ex);
             }
         }
@@ -82,7 +82,7 @@ namespace ApiSindisure.Apps.FileUpload
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(FileUploadApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(FileUploadApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao fazer download do arquivo", ex);
             }
             
@@ -107,7 +107,7 @@ namespace ApiSindisure.Apps.FileUpload
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(FileUploadApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(FileUploadApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 return false;
             }
         }

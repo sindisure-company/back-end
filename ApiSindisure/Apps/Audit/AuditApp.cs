@@ -60,7 +60,7 @@ namespace ApiSindisure.Apps.Audit
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(AuditApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(AuditApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao criar conta a pagar", ex);
             }
         }
@@ -111,7 +111,7 @@ namespace ApiSindisure.Apps.Audit
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(AuditApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(AuditApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao buscar logs de auditoria", ex);
             }
         }

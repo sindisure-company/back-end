@@ -58,7 +58,7 @@ namespace ApiSindisure.Apps.AccountsReceivable
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -111,7 +111,7 @@ namespace ApiSindisure.Apps.AccountsReceivable
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao criar conta a pagar", ex);
             }
         }
@@ -171,7 +171,7 @@ namespace ApiSindisure.Apps.AccountsReceivable
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao criar conta a pagar", ex);
             }
         }
@@ -237,7 +237,7 @@ namespace ApiSindisure.Apps.AccountsReceivable
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao atualizar conta a pagar", ex);
             }
         }
@@ -308,7 +308,7 @@ namespace ApiSindisure.Apps.AccountsReceivable
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao atualizar conta a pagar", ex);
             }
         }
@@ -325,7 +325,7 @@ namespace ApiSindisure.Apps.AccountsReceivable
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao excluir conta a pagar", ex);
             }
         }
@@ -343,7 +343,7 @@ namespace ApiSindisure.Apps.AccountsReceivable
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(AccountsReceivableApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao excluir conta a pagar", ex);
             }
         }

@@ -110,7 +110,7 @@ namespace ApiSindisure.Apps.EmailReportsApp
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(EmailReportsApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(EmailReportsApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao enviar relatório mensal", ex);
             }
         }

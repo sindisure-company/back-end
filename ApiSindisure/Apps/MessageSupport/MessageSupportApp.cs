@@ -50,7 +50,7 @@ namespace ApiSindisure.Apps.MessageSupport
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -86,7 +86,7 @@ namespace ApiSindisure.Apps.MessageSupport
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao buscar contas a pagar", ex);
             }
         }
@@ -126,7 +126,7 @@ namespace ApiSindisure.Apps.MessageSupport
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao criar condominio", ex);
             }
         }
@@ -209,7 +209,7 @@ namespace ApiSindisure.Apps.MessageSupport
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao atualizar condominio", ex);
             }
         }
@@ -226,7 +226,7 @@ namespace ApiSindisure.Apps.MessageSupport
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}", ex);
+                _logger.LogError($"{nameof(MessageSupportApp)} - Erro ao acessar o banco de dados: {LogId}" + ex.Message, ex);
                 throw new Exception("Erro ao excluir condominio", ex);
             }
         }
