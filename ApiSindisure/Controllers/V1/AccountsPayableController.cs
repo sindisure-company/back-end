@@ -1,0 +1,195 @@
+using ApiSindisure.Domain.Interfaces.Apps.AccountsPayable;
+using ApiSindisure.Domain.ViewModel.AccountsPayable;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
+namespace ApiSindisure.Controllers.V1
+{
+    [ApiController]
+    [Route("api/v1/[controller]")]
+    [Authorize]
+    public class AccountsPayableController : ControllerBase
+    {
+        [HttpGet]
+        [ProducesResponseType<List<AccountsPayableViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAccountsPayable(
+            [FromQuery] string condominiumId,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(condominiumId))
+                    return BadRequest(new { error = "CondominiumId não pode ser nulo ou vazio." });
+
+                var request = new AccountsPayableViewModel.GetRequest { Id = condominiumId };
+                var response = await app.GetAccountsPayableAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar contas a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType<List<AccountsPayableViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAccountsPayablePendingRecurring(
+             string id,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                    return BadRequest(new { error = "CondominiumId não pode ser nulo ou vazio." });
+
+                var request = new AccountsPayableViewModel.GetRequest { Id = id };
+                var response = await app.GetAccountsPayablePendingRecurringAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar contas a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
+        [HttpGet("GetUpcommingAccountsPayable")]
+        [ProducesResponseType<List<AccountsPayableViewModel.Response>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUpcommingAccountsPayable(
+            [FromQuery] string condominiumId,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(condominiumId))
+                    return BadRequest(new { error = "CondominiumId não pode ser nulo ou vazio." });
+
+                var request = new AccountsPayableViewModel.GetRequest { Id = condominiumId };
+                var response = await app.GetUpcommingAccountsPayableAsync(request, CancellationToken.None);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao buscar contas a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType<AccountsPayableViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateAccountsPayable(
+            [FromBody] AccountsPayableViewModel.CreateRequest request,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                var response = await app.CreateAccountsPayableAsync(request, CancellationToken.None);
+                return Created(response.Id, response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao criar conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
+        [HttpPost("CreateRecurringAccountsPayable")]
+        [ProducesResponseType<AccountsPayableViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateRecurringAccountsPayable(
+            [FromBody] List<AccountsPayableViewModel.CreateRequest> request,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                var response = await app.CreateRecurringAccountsPayableAsync(request, CancellationToken.None);
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao criar conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType<AccountsPayableViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateAccountsPayable(
+            string id,
+            [FromBody] AccountsPayableViewModel.UpdateRequest request,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                request.Id = id;
+                var response = await app.UpdateAccountsPayableAsync(request, CancellationToken.None);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao atualizar conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+
+        [HttpPut("UpdateAccountsStatusPayable/{id}")]
+        [ProducesResponseType<AccountsPayableViewModel.Response>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateAccountsStatusPayable(
+            string id,
+            [FromBody] AccountsPayableViewModel.UpdateRequest request,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                request.Id = id;
+                var response = await app.UpdateAccountsPayableStatusAsync(request, CancellationToken.None);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao atualizar conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+       
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteAccountsPayable(
+            string id,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                var request = new AccountsPayableViewModel.DeleteRequest { Id = id };
+                await app.DeleteAccountsPayableAsync(request, CancellationToken.None);
+                return Ok(new { message = "Conta a pagar excluída com sucesso" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao excluir conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+        
+        [HttpDelete("DeleteUpcommingAccountsPayable/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteUpcommingAccountsPayable(
+            string id,
+            [FromServices] IAccountsPayableApp app)
+        {
+            try
+            {
+                var request = new AccountsPayableViewModel.DeleteRequest { Id = id };
+                await app.DeleteUpcommingAccountsPayableAsync(request, CancellationToken.None);
+                return Ok(new { message = "Conta a pagar excluída com sucesso" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = "Erro ao excluir conta a pagar. Mais detalhes: " + ex.Message });
+            }
+        }
+    }
+}
+
