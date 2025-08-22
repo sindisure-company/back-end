@@ -25,9 +25,6 @@ public class UserPlansHistoryModel : Supabase.Postgrest.Models.BaseModel
     [Supabase.Postgrest.Attributes.Column("status")]
     public string Status { get; set; }
 
-    [Supabase.Postgrest.Attributes.Column("updated_at")]
-    public DateTime UpdatedAt { get; set; }
-
     [Supabase.Postgrest.Attributes.Column("user_id")]
     public string UserId { get; set; }
 

@@ -46,7 +46,6 @@ namespace ApiSindisure.Apps.UserPlansHistory
                     PlanValue = model.PlanValue,
                     Status = model.Status,
                     CreatedAt = model.CreatedAt,
-                    UpdatedAt = model.UpdatedAt,
                     UserId = model.UserId
                 }).ToList();
             }
@@ -72,7 +71,6 @@ namespace ApiSindisure.Apps.UserPlansHistory
                     PlanValue = request.PlanValue,
                     Status = request.Status,
                     UserPlanId = request.UserPlanId,
-                    UpdatedAt = DateTime.UtcNow,
                     CreatedAt = DateTime.UtcNow,
                     UserId = request.UserId
                 };
@@ -93,7 +91,6 @@ namespace ApiSindisure.Apps.UserPlansHistory
                     PlanValue = createdModel.PlanValue,
                     Status = createdModel.Status,
                     CreatedAt = createdModel.CreatedAt,
-                    UpdatedAt = createdModel.UpdatedAt,
                     UserId = createdModel.UserId,
                     UserPlanId = createdModel.UserPlanId
                 };
@@ -119,7 +116,6 @@ namespace ApiSindisure.Apps.UserPlansHistory
                     PlanName = request.PlanName,
                     PlanValue = request.PlanValue,
                     Status = request.Status,
-                    UpdatedAt = DateTime.UtcNow,
                     UserId = request.UserId,
                     UserPlanId = request.UserPlanId
                 };               
@@ -141,7 +137,6 @@ namespace ApiSindisure.Apps.UserPlansHistory
                     PlanValue = updatedModel.PlanValue,
                     Status = updatedModel.Status,
                     CreatedAt = updatedModel.CreatedAt,
-                    UpdatedAt = updatedModel.UpdatedAt,
                     UserId = updatedModel.UserId,
                     UserPlanId = updatedModel.UserPlanId,
                 };

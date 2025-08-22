@@ -87,7 +87,7 @@ namespace ApiSindisure.Controllers.V1
             {
                 request.Id = id;
                 var response = await app.UpdateUserPlansAsync(request, CancellationToken.None);
-                return NoContent();
+                return Ok(response);
             }
             catch (Exception ex)
             {
