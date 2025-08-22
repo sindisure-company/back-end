@@ -187,7 +187,7 @@ namespace ApiSindisure.Apps.UserDetails
                 var resultGet = await client
                     .From<UserDetailsModel>()
                     .Select("*")
-                    .Filter("id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Filter("auth_user_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
                     .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
                     .Get();
                 
@@ -196,8 +196,8 @@ namespace ApiSindisure.Apps.UserDetails
 
                 var model = new UserDetailsModel
                     {
-                        Id = request.Id,
-                        AuthUserId = request.AuthUserId,
+                        Id = retornoGet.Id,
+                        AuthUserId = retornoGet.AuthUserId,
                         Email = request.Email,
                         Address = request.Address,
                         AvatarUrl = request.AvatarUrl,
@@ -218,10 +218,44 @@ namespace ApiSindisure.Apps.UserDetails
 
                 var result = await client
                     .From<UserDetailsModel>()
-                    .Where(x => x.Id == request.Id)
+                    .Where(x => x.Id == retornoGet.Id)
                     .Update(model);
 
                 var updatedModel = result.Models.First();
+
+                var resultGet2 = await client
+                    .From<UserProfilesModel>()
+                    .Select("*")
+                    .Filter("user_id", Supabase.Postgrest.Constants.Operator.Equals, request.Id)
+                    .Order("created_at", Supabase.Postgrest.Constants.Ordering.Ascending)
+                    .Get();
+                
+                    var retornoGet2 = resultGet2.Models.FirstOrDefault();
+                
+                var model2 = new UserProfilesModel
+                    {
+                        Id = retornoGet2.Id,
+                        UserId = retornoGet2.UserId,
+                        Address = request.Address,
+                        AvatarUrl = request.AvatarUrl,
+                        City = request.City,
+                        DocumentNumber = request.DocumentNumber,
+                        FirstName = request.FirstName,
+                        LastName = request.LastName,
+                        Neighborhood = request.Neighborhood,
+                        Number = request.Number,
+                        Phone = request.Phone,
+                        State = request.State,
+                        UpdatedAt = DateTime.UtcNow,
+                        CreatedAt = retornoGet2.CreatedAt,
+                    };               
+
+                var result2 = await client
+                    .From<UserProfilesModel>()
+                    .Where(x => x.Id == retornoGet2.Id)
+                    .Update(model2);
+
+                var updatedModel2 = result2.Models.First();
 
                 return new UserDetailsViewModel.Response
                 {
@@ -243,7 +277,7 @@ namespace ApiSindisure.Apps.UserDetails
                     State = updatedModel.State,
                     CreatedAt = updatedModel.CreatedAt,
                     UpdatedAt = updatedModel.UpdatedAt,
-                  
+
                 };
             }
             catch (Exception ex)
